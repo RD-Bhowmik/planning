@@ -12,24 +12,331 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      body {
-        background-color: #f8f9fa;
+      :root {
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --success-gradient: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);
+        --warning-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+        --card-shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.12);
       }
+
+      * {
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        background-attachment: fixed;
+      }
+
+      .navbar {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        padding: 1rem 0;
+      }
+
+      .navbar-brand {
+        font-weight: 700;
+        font-size: 1.5rem;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        transition: all 0.3s ease;
+      }
+
+      .navbar-brand:hover {
+        transform: scale(1.05);
+      }
+
+      .navbar-brand i {
+        -webkit-text-fill-color: #667eea;
+      }
+
+      .nav-link {
+        color: #2c3e50 !important;
+        font-weight: 500;
+        margin: 0 0.25rem;
+        padding: 0.6rem 1.2rem !important;
+        border-radius: 12px;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        overflow: hidden;
+      }
+
+      .nav-link::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 3px;
+        background: var(--primary-gradient);
+        transform: translateX(-50%);
+        transition: width 0.4s ease;
+        border-radius: 2px;
+      }
+
+      .nav-link i {
+        font-size: 1.1rem;
+        transition: all 0.4s ease;
+      }
+
+      .nav-link span {
+        position: relative;
+        transition: all 0.4s ease;
+      }
+
+      .nav-link:hover {
+        background: rgba(102, 126, 234, 0.1);
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(102, 126, 234, 0.15);
+      }
+
+      .nav-link:hover::before {
+        width: 80%;
+      }
+
+      .nav-link:hover i {
+        transform: scale(1.2) rotate(5deg);
+        color: #667eea;
+      }
+
+      .nav-link:hover span {
+        color: #667eea;
+      }
+
+      .nav-link.active {
+        background: var(--primary-gradient);
+        color: white !important;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        transform: translateY(-2px);
+      }
+
+      .nav-link.active::before {
+        width: 0;
+      }
+
+      .nav-link.active i,
+      .nav-link.active span {
+        color: white !important;
+        transform: none;
+      }
+
+      .nav-link.active:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+      }
+
+      main.container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 2.5rem;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--card-shadow);
+        backdrop-filter: blur(10px);
+        animation: fadeInUp 0.6s ease;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
       .card {
         margin-bottom: 1.5rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: none;
+        border-radius: 16px;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s ease;
+        overflow: hidden;
+        background: white;
       }
-      .navbar-brand {
-        font-weight: bold;
+
+      .card:hover {
+        box-shadow: var(--card-shadow-hover);
+        transform: translateY(-4px);
       }
-      .nav-link.active {
-        font-weight: bold;
+
+      .card-header {
+        font-weight: 600;
+        border: none;
+        padding: 1.25rem 1.5rem;
+      }
+
+      .card-body {
+        padding: 1.5rem;
+      }
+
+      .btn {
+        border-radius: 10px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border: none;
+      }
+
+      .btn-primary {
+        background: var(--primary-gradient);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-success {
+        background: var(--success-gradient);
+        box-shadow: 0 4px 12px rgba(11, 163, 96, 0.3);
+      }
+
+      .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(11, 163, 96, 0.4);
+      }
+
+      .btn-warning {
+        background: var(--warning-gradient);
+        box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
+      }
+
+      .btn-danger {
+        background: linear-gradient(135deg, #f85032 0%, #e73827 100%);
+      }
+
+      .btn-secondary {
+        background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+      }
+
+      .display-5,
+      .display-4 {
+        font-weight: 700;
+        letter-spacing: -0.5px;
+      }
+
+      .lead {
+        color: #6c757d;
+        font-weight: 400;
+      }
+
+      .form-control,
+      .form-select {
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .form-control:focus,
+      .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+      }
+
+      .table {
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .table thead th {
+        background: var(--primary-gradient);
+        color: white;
+        font-weight: 600;
+        border: none;
+      }
+
+      .progress {
+        height: 30px;
+        border-radius: 15px;
+        background: #e9ecef;
+        overflow: hidden;
+      }
+
+      .progress-bar {
+        background: var(--success-gradient);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .alert {
+        border-radius: 12px;
+        border: none;
+        box-shadow: var(--card-shadow);
+      }
+
+      .badge {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 500;
+      }
+
+      /* Gradient borders for special cards */
+      .gradient-border {
+        position: relative;
+        background: white;
+        background-clip: padding-box;
+        border: solid 3px transparent;
+      }
+
+      .gradient-border::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: -1;
+        margin: -3px;
+        border-radius: inherit;
+        background: var(--primary-gradient);
+      }
+
+      /* Smooth scrollbar */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--primary-gradient);
+        border-radius: 5px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #5568d3;
       }
     </style>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
         <a class="navbar-brand" href="{{ url_for('sources_page') }}"
           ><i class="bi bi-piggy-bank-fill"></i> Finance Tracker</a
@@ -51,36 +358,55 @@
               <a
                 class="nav-link {% if request.endpoint == 'sources_page' %}active{% endif %}"
                 href="{{ url_for('sources_page') }}"
-                >Capital Sources</a
               >
+                <i class="bi bi-wallet2"></i>
+                <span>Capital Sources</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.endpoint == 'loan_page' or request.endpoint == 'edit_loan_page' %}active{% endif %}"
+                href="{{ url_for('loan_page') }}"
+              >
+                <i class="bi bi-bank2"></i>
+                <span>Loan Management</span>
+              </a>
             </li>
             <li class="nav-item">
               <a
                 class="nav-link {% if request.endpoint == 'capital_page' %}active{% endif %}"
                 href="{{ url_for('capital_page') }}"
-                >Capital Mngmt</a
               >
+                <i class="bi bi-cash-stack"></i>
+                <span>Capital Management</span>
+              </a>
             </li>
             <li class="nav-item">
               <a
                 class="nav-link {% if request.endpoint == 'savings_page' %}active{% endif %}"
                 href="{{ url_for('savings_page') }}"
-                >Savings Mngmt</a
               >
+                <i class="bi bi-piggy-bank"></i>
+                <span>Savings Management</span>
+              </a>
             </li>
             <li class="nav-item">
               <a
                 class="nav-link {% if request.endpoint == 'daily_tracker_page' %}active{% endif %}"
                 href="{{ url_for('daily_tracker_page') }}"
-                >Daily Tracker</a
               >
+                <i class="bi bi-calendar-day"></i>
+                <span>Daily Tracker</span>
+              </a>
             </li>
             <li class="nav-item">
               <a
                 class="nav-link {% if request.endpoint == 'monthly_summary_page' %}active{% endif %}"
                 href="{{ url_for('monthly_summary_page') }}"
-                >Monthly Summary</a
               >
+                <i class="bi bi-bar-chart-line"></i>
+                <span>Monthly Summary</span>
+              </a>
             </li>
           </ul>
         </div>

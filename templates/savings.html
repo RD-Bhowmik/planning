@@ -1,191 +1,485 @@
 {% extends "base.html" %} {% block title %}Savings Management{% endblock %} {%
 block content %}
-<header class="mb-4">
-  <h1 class="display-5">Savings Management</h1>
-  <p class="lead text-muted">
-    Track your monthly income, savings, and related expenses.
-  </p>
+
+<header class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1 class="display-4 mb-2">
+      <i class="bi bi-piggy-bank-fill text-primary"></i> Savings Management
+    </h1>
+    <p class="lead text-muted mb-0">
+      Track your monthly income, savings, and related expenses.
+    </p>
+  </div>
 </header>
 
-<div class="card mb-4 shadow-sm">
-  <div class="card-header"><h3>Savings Summary</h3></div>
-  <div class="card-body">
-    <div class="row text-center">
-      <div class="col-md-4">
-        <h5>Gross Savings</h5>
-        <p class="display-5 text-info">
-          {{ "%.2f"|format(total_savings) }} AUD
+<!-- Summary Cards Row -->
+<div class="row g-3 mb-4">
+  <div class="col-lg-4">
+    <div
+      class="card border-0 shadow-sm"
+      style="
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.1) 0%,
+          rgba(118, 75, 162, 0.1) 100%
+        );
+        border-left: 4px solid #667eea;
+      "
+    >
+      <div class="card-body text-center p-3">
+        <div class="mb-2">
+          <div
+            class="p-2 rounded-circle d-inline-block"
+            style="
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            "
+          >
+            <i class="bi bi-wallet2 fs-4 text-white"></i>
+          </div>
+        </div>
+        <h6 class="text-muted mb-2 fw-semibold">Gross Savings</h6>
+        <p class="h3 mb-1 fw-bold" style="color: #667eea">
+          {{ "%.2f"|format(total_savings) }}
         </p>
+        <p class="text-muted small mb-0">AUD</p>
       </div>
-      <div class="col-md-4">
-        <h5>Total Deductions</h5>
-        <p class="display-5 text-danger">
-          {{ "%.2f"|format(total_expenses_from_savings) }} AUD
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div
+      class="card border-0 shadow-sm"
+      style="
+        background: linear-gradient(
+          135deg,
+          rgba(248, 80, 50, 0.1) 0%,
+          rgba(231, 56, 39, 0.1) 100%
+        );
+        border-left: 4px solid #f85032;
+      "
+    >
+      <div class="card-body text-center p-3">
+        <div class="mb-2">
+          <div
+            class="p-2 rounded-circle d-inline-block"
+            style="
+              background: linear-gradient(135deg, #f85032 0%, #e73827 100%);
+            "
+          >
+            <i class="bi bi-arrow-down-circle fs-4 text-white"></i>
+          </div>
+        </div>
+        <h6 class="text-muted mb-2 fw-semibold">Total Deductions</h6>
+        <p class="h3 mb-1 fw-bold text-danger">
+          {{ "%.2f"|format(total_expenses_from_savings) }}
         </p>
+        <p class="text-muted small mb-0">AUD</p>
       </div>
-      <div class="col-md-4">
-        <h5>Net Savings</h5>
-        <p class="display-5 text-primary fw-bold">
-          {{ "%.2f"|format(net_savings) }} AUD
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div
+      class="card border-0 shadow-sm"
+      style="
+        background: linear-gradient(
+          135deg,
+          rgba(11, 163, 96, 0.1) 0%,
+          rgba(60, 186, 146, 0.1) 100%
+        );
+        border-left: 4px solid #0ba360;
+      "
+    >
+      <div class="card-body text-center p-3">
+        <div class="mb-2">
+          <div
+            class="p-2 rounded-circle d-inline-block"
+            style="
+              background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);
+            "
+          >
+            <i class="bi bi-trophy fs-4 text-white"></i>
+          </div>
+        </div>
+        <h6 class="text-muted mb-2 fw-semibold">Net Savings</h6>
+        <p class="h3 mb-1 fw-bold text-success">
+          {{ "%.2f"|format(net_savings) }}
         </p>
+        <p class="text-muted small mb-0">AUD</p>
       </div>
     </div>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-8">
-    <div class="card shadow-sm mb-4">
-      <div class="card-header"><h3>Monthly Cash Flow</h3></div>
-      <div class="card-body">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>Month</th>
-              <th>Income</th>
-              <th>Loan Repayment</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for entry in monthly_cash_flow %}
-            <tr>
-              <td>
-                {{ datetime.strptime(entry.month, '%Y-%m').strftime('%B %Y') }}
-              </td>
-              <td>{{ "%.2f"|format(entry.income) }}</td>
-              <td>{{ "%.2f"|format(entry.loan_repayment) }}</td>
-              <td>
-                <a
-                  href="{{ url_for('edit_monthly_entry', index=loop.index0) }}"
-                  class="btn btn-secondary btn-sm"
-                  ><i class="bi bi-pencil"></i
-                ></a>
-                <a
-                  href="{{ url_for('delete_item', list_name='monthly_cash_flow', index=loop.index0) }}"
-                  class="btn btn-danger btn-sm"
-                  ><i class="bi bi-trash"></i
-                ></a>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+<!-- Main Content Layout -->
+<div class="row g-4">
+  <!-- Left Column - Tables (Wider) -->
+  <div class="col-lg-8">
+    <!-- Monthly Cash Flow Section -->
+    <div class="card shadow-lg mb-4 border-0">
+      <div
+        class="card-header text-white py-3"
+        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+      >
+        <h4 class="mb-0">
+          <i class="bi bi-calendar-check"></i> Monthly Cash Flow
+          <span class="badge bg-white text-primary ms-2"
+            >{{ monthly_cash_flow|length }} entries</span
+          >
+        </h4>
+      </div>
+      <div class="card-body p-0">
+        <div
+          class="table-responsive"
+          style="max-height: 400px; overflow-y: auto"
+        >
+          <table class="table table-hover mb-0">
+            <thead
+              class="sticky-top"
+              style="
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+              "
+            >
+              <tr>
+                <th class="py-3 px-4"><i class="bi bi-calendar3"></i> Month</th>
+                <th class="py-3 px-4 text-end">
+                  <i class="bi bi-cash-coin"></i> Income
+                </th>
+                <th class="py-3 px-4 text-end">
+                  <i class="bi bi-bank"></i> Loan Repayment
+                </th>
+                <th class="py-3 px-4 text-end">
+                  <i class="bi bi-calculator"></i> Net
+                </th>
+                <th class="py-3 px-4 text-center">
+                  <i class="bi bi-gear"></i> Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for entry in monthly_cash_flow %}
+              <tr>
+                <td class="py-3 px-4 fw-semibold">
+                  {{ datetime.strptime(entry.month, '%Y-%m').strftime('%B %Y')
+                  }}
+                </td>
+                <td class="py-3 px-4 text-end text-success fw-semibold">
+                  {{ "%.2f"|format(entry.income) }} AUD
+                </td>
+                <td class="py-3 px-4 text-end text-danger">
+                  {{ "%.2f"|format(entry.loan_repayment) }} AUD
+                </td>
+                <td class="py-3 px-4 text-end fw-bold" style="color: #667eea">
+                  {{ "%.2f"|format(entry.income - entry.loan_repayment) }} AUD
+                </td>
+                <td class="py-3 px-4 text-center">
+                  <div class="btn-group btn-group-sm">
+                    <a
+                      href="{{ url_for('edit_monthly_entry', index=loop.index0) }}"
+                      class="btn btn-outline-primary"
+                      title="Edit"
+                    >
+                      <i class="bi bi-pencil"></i>
+                    </a>
+                    <a
+                      href="{{ url_for('delete_item', list_name='monthly_cash_flow', index=loop.index0) }}"
+                      class="btn btn-outline-danger"
+                      title="Delete"
+                      onclick="return confirm('Delete this entry?');"
+                    >
+                      <i class="bi bi-trash"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            <tfoot class="sticky-bottom" style="background: #f8f9fa">
+              <tr class="fw-bold">
+                <td class="py-3 px-4">Total</td>
+                <td class="py-3 px-4 text-end text-success">
+                  {{ "%.2f"|format(monthly_cash_flow|sum(attribute='income')) }}
+                  AUD
+                </td>
+                <td class="py-3 px-4 text-end text-danger">
+                  {{
+                  "%.2f"|format(monthly_cash_flow|sum(attribute='loan_repayment'))
+                  }} AUD
+                </td>
+                <td class="py-3 px-4 text-end" style="color: #667eea">
+                  {{ "%.2f"|format(monthly_cash_flow|sum(attribute='income') -
+                  monthly_cash_flow|sum(attribute='loan_repayment')) }} AUD
+                </td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        {% if not monthly_cash_flow %}
+        <div class="p-5 text-center">
+          <i class="bi bi-inbox fs-1 text-muted mb-3"></i>
+          <p class="text-muted">
+            No entries yet. Add monthly income using the form on the right.
+          </p>
+        </div>
+        {% endif %}
       </div>
     </div>
-    <div class="card shadow-sm">
-      <div class="card-header"><h3>Expenses From Savings</h3></div>
-      <div class="card-body">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>Description</th>
-              <th>Amount</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for expense in expenses_from_savings %}
-            <tr>
-              <td>{{ expense.name }}</td>
-              <td>{{ "%.2f"|format(expense.amount) }}</td>
-              <td>
-                <a
-                  href="{{ url_for('edit_savings_expense', index=loop.index0) }}"
-                  class="btn btn-secondary btn-sm"
-                  ><i class="bi bi-pencil"></i
-                ></a>
-                <a
-                  href="{{ url_for('delete_item', list_name='expenses_from_savings', index=loop.index0) }}"
-                  class="btn btn-danger btn-sm"
-                  ><i class="bi bi-trash"></i
-                ></a>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+
+    <!-- Expenses From Savings Section -->
+    <div class="card shadow-lg border-0">
+      <div
+        class="card-header text-white py-3"
+        style="background: linear-gradient(135deg, #f85032 0%, #e73827 100%)"
+      >
+        <h4 class="mb-0">
+          <i class="bi bi-receipt"></i> Expenses From Savings
+          <span class="badge bg-white text-danger ms-2"
+            >{{ expenses_from_savings|length }} expenses</span
+          >
+        </h4>
+      </div>
+      <div class="card-body p-0">
+        <div
+          class="table-responsive"
+          style="max-height: 400px; overflow-y: auto"
+        >
+          <table class="table table-hover mb-0">
+            <thead
+              class="sticky-top"
+              style="
+                background: linear-gradient(135deg, #f85032 0%, #e73827 100%);
+                color: white;
+              "
+            >
+              <tr>
+                <th class="py-3 px-4">
+                  <i class="bi bi-tag"></i> Expense Name
+                </th>
+                <th class="py-3 px-4 text-end">
+                  <i class="bi bi-currency-dollar"></i> Amount
+                </th>
+                <th class="py-3 px-4 text-center">
+                  <i class="bi bi-gear"></i> Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for expense in expenses_from_savings %}
+              <tr>
+                <td class="py-3 px-4">{{ expense.name }}</td>
+                <td class="py-3 px-4 text-end fw-semibold text-danger">
+                  {{ "%.2f"|format(expense.amount) }} AUD
+                </td>
+                <td class="py-3 px-4 text-center">
+                  <div class="btn-group btn-group-sm">
+                    <a
+                      href="{{ url_for('edit_savings_expense', index=loop.index0) }}"
+                      class="btn btn-outline-primary"
+                      title="Edit"
+                    >
+                      <i class="bi bi-pencil"></i>
+                    </a>
+                    <a
+                      href="{{ url_for('delete_item', list_name='expenses_from_savings', index=loop.index0) }}"
+                      class="btn btn-outline-danger"
+                      title="Delete"
+                      onclick="return confirm('Delete this expense?');"
+                    >
+                      <i class="bi bi-trash"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            <tfoot class="sticky-bottom" style="background: #f8f9fa">
+              <tr class="fw-bold">
+                <td class="py-3 px-4">Total Expenses</td>
+                <td class="py-3 px-4 text-end text-danger">
+                  {{
+                  "%.2f"|format(expenses_from_savings|sum(attribute='amount'))
+                  }} AUD
+                </td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        {% if not expenses_from_savings %}
+        <div class="p-5 text-center">
+          <i class="bi bi-inbox fs-1 text-muted mb-3"></i>
+          <p class="text-muted">
+            No expenses yet. Add expenses using the form on the right.
+          </p>
+        </div>
+        {% endif %}
       </div>
     </div>
   </div>
-  <div class="col-md-4">
-    <div class="card shadow-sm">
-      <div class="card-header"><h3>Add Savings Expense</h3></div>
-      <div class="card-body">
-        <form action="{{ url_for('add_saving_expense') }}" method="post">
-          <div class="mb-3">
-            <label for="name" class="form-label">Expense Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="name"
-              name="name"
-              required
-            />
-          </div>
-          <div class="mb-3">
-            <label for="amount" class="form-label">Amount</label>
-            <input
-              type="number"
-              class="form-control"
-              id="amount"
-              name="amount"
-              step="0.01"
-              required
-            />
-          </div>
-          <button type="submit" class="btn btn-primary w-100">
-            Add Expense
-          </button>
-        </form>
-      </div>
-    </div>
-    <div class="card shadow-sm">
-      <div class="card-header"><h3>Add Monthly Lump Sum</h3></div>
-      <div class="card-body">
-        <form
-          action="{{ url_for('add_lump_sum_monthly_income') }}"
-          method="post"
+
+  <!-- Right Column - Forms (Narrower, Sticky) -->
+  <div class="col-lg-4">
+    <div class="sticky-top" style="top: 100px">
+      <!-- Add Monthly Lump Sum Form -->
+      <div
+        class="card shadow-lg mb-4 border-0"
+        style="border-left: 5px solid #667eea"
+      >
+        <div
+          class="card-header text-white py-3"
+          style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
         >
-          <div class="mb-3">
-            <label class="form-label">For Month</label>
-            <div class="input-group">
-              <select class="form-select" name="month" required>
-                <option selected disabled value="">Month...</option>
-                {% for month in months %}
-                <option value="{{ month.value }}">{{ month.name }}</option>
-                {% endfor %}
-              </select>
-              <select class="form-select" name="year" required>
-                <option selected disabled value="">Year...</option>
-                {% for year in years %}
-                <option value="{{ year }}">{{ year }}</option>
-                {% endfor %}
-              </select>
+          <h5 class="mb-0">
+            <i class="bi bi-plus-circle-fill"></i> Add Monthly Lump Sum
+          </h5>
+        </div>
+        <div class="card-body p-4">
+          <form
+            action="{{ url_for('add_lump_sum_monthly_income') }}"
+            method="post"
+          >
+            <div class="mb-3">
+              <label class="form-label fw-semibold">
+                <i class="bi bi-calendar3"></i> For Month
+              </label>
+              <div class="row g-2">
+                <div class="col-7">
+                  <select class="form-select" name="month" required>
+                    <option selected disabled value="">Month...</option>
+                    {% for month in months %}
+                    <option value="{{ month.value }}">{{ month.name }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="col-5">
+                  <select class="form-select" name="year" required>
+                    <option selected disabled value="">Year...</option>
+                    {% for year in years %}
+                    <option value="{{ year }}">{{ year }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="mb-3">
-            <label for="gross_income" class="form-label"
-              >Gross Monthly Income</label
-            >
-            <input
-              type="number"
-              class="form-control"
-              id="gross_income"
-              name="gross_income"
-              step="0.01"
-              required
-            />
-          </div>
-          <div class="form-text mb-3">
-            Tax and default loan repayment will be deducted automatically.
-          </div>
-          <button type="submit" class="btn btn-info w-100">
-            Add Lump Sum to Savings
-          </button>
-        </form>
+            <div class="mb-3">
+              <label for="gross_income" class="form-label fw-semibold">
+                <i class="bi bi-cash-stack"></i> Gross Monthly Income
+              </label>
+              <div class="input-group input-group-lg">
+                <span class="input-group-text">AUD</span>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="gross_income"
+                  name="gross_income"
+                  step="0.01"
+                  placeholder="0.00"
+                  required
+                />
+              </div>
+              <div class="form-text">
+                <i class="bi bi-info-circle"></i> Tax ({{
+                settings.tax_rate_percent }}%) and loan repayment will be
+                deducted automatically.
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 py-2 shadow">
+              <i class="bi bi-check-circle"></i> Add to Cash Flow
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Add Savings Expense Form -->
+      <div
+        class="card shadow-lg border-0"
+        style="border-left: 5px solid #f85032"
+      >
+        <div
+          class="card-header text-white py-3"
+          style="background: linear-gradient(135deg, #f85032 0%, #e73827 100%)"
+        >
+          <h5 class="mb-0">
+            <i class="bi bi-dash-circle-fill"></i> Add Savings Expense
+          </h5>
+        </div>
+        <div class="card-body p-4">
+          <form action="{{ url_for('add_saving_expense') }}" method="post">
+            <div class="mb-3">
+              <label for="name" class="form-label fw-semibold">
+                <i class="bi bi-tag"></i> Expense Name
+              </label>
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                id="name"
+                name="name"
+                placeholder="e.g., Accommodation, Tuition"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="amount" class="form-label fw-semibold">
+                <i class="bi bi-currency-dollar"></i> Amount
+              </label>
+              <div class="input-group input-group-lg">
+                <span class="input-group-text">AUD</span>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="amount"
+                  name="amount"
+                  step="0.01"
+                  placeholder="0.00"
+                  required
+                />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-danger w-100 py-2 shadow">
+              <i class="bi bi-check-circle"></i> Add Expense
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<style>
+  .table thead.sticky-top th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .table tfoot.sticky-bottom td {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+  }
+
+  .table-responsive::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  .table-responsive::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 4px;
+  }
+
+  .table tbody tr {
+    transition: all 0.2s ease;
+  }
+
+  .table tbody tr:hover {
+    background-color: rgba(102, 126, 234, 0.08);
+    transform: scale(1.01);
+  }
+</style>
+
 {% endblock %}

@@ -1,90 +1,300 @@
 {% extends "base.html" %} {% block title %}Capital Management{% endblock %} {%
 block content %}
-<header class="d-flex justify-content-between align-items-center mb-4">
-  <div>
-    <h1 class="display-5">Capital Management</h1>
-    <p class="lead text-muted">Track your total capital and major expenses.</p>
-  </div>
-  <div class="text-end">
-    <h5 class="text-muted">Remaining Capital</h5>
-    <p class="display-4 text-success fw-bold">
-      {{ "%.2f"|format(remaining_capital) }} AUD
-    </p>
-    <small class="text-muted"
-      >This amount is included in your Net Savings.</small
-    >
+
+<header class="mb-4">
+  <div class="row align-items-center">
+    <div class="col-lg-7">
+      <h1 class="display-5 mb-2">
+        <i class="bi bi-cash-stack text-primary"></i> Capital Management
+      </h1>
+      <p class="lead text-muted mb-0">
+        Track your total capital and major expenses from initial funding.
+      </p>
+    </div>
+    <div class="col-lg-5">
+      <div
+        class="card border-0 shadow-sm"
+        style="
+          background: linear-gradient(
+            135deg,
+            rgba(11, 163, 96, 0.1) 0%,
+            rgba(60, 186, 146, 0.1) 100%
+          );
+          border-left: 4px solid #0ba360;
+        "
+      >
+        <div class="card-body text-center p-3">
+          <div class="mb-2">
+            <i class="bi bi-wallet-fill fs-4 text-success"></i>
+          </div>
+          <h6 class="text-muted mb-2 fw-semibold">Remaining Capital</h6>
+          <p class="h3 fw-bold text-success mb-1">
+            {{ "%.2f"|format(remaining_capital) }}
+          </p>
+          <p class="text-muted small mb-1">AUD</p>
+          <small class="text-muted fst-italic" style="font-size: 0.75rem">
+            <i class="bi bi-info-circle"></i> Included in your Net Savings
+          </small>
+        </div>
+      </div>
+    </div>
   </div>
 </header>
 
-<div class="row">
-  <div class="col-md-8">
-    <div class="card shadow-sm">
-      <div class="card-header"><h3>Expenses from Capital</h3></div>
-      <div class="card-body">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>Description</th>
-              <th>Amount (AUD)</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for expense in capital.expenses_from_capital %}
-            <tr>
-              <td>{{ expense.name }}</td>
-              <td>{{ "%.2f"|format(expense.amount) }}</td>
-              <td>
-                <a
-                  href="{{ url_for('edit_capital_expense', index=loop.index0) }}"
-                  class="btn btn-secondary btn-sm"
-                  ><i class="bi bi-pencil"></i> Edit</a
-                >
-                <a
-                  href="{{ url_for('delete_item', list_name='capital_expenses', index=loop.index0) }}"
-                  class="btn btn-danger btn-sm"
-                  ><i class="bi bi-trash"></i> Delete</a
-                >
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+<!-- Capital Summary Cards -->
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div
+      class="card border-0 shadow-sm"
+      style="
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.1) 0%,
+          rgba(118, 75, 162, 0.1) 100%
+        );
+        border-left: 3px solid #667eea;
+      "
+    >
+      <div class="card-body text-center p-3">
+        <i class="bi bi-piggy-bank fs-4 mb-2" style="color: #667eea"></i>
+        <h6 class="text-muted mb-2 fw-semibold small">Total Initial Capital</h6>
+        <p class="h4 mb-0 fw-bold" style="color: #667eea">
+          {{ "%.2f"|format(capital.total_capital_aud) }} AUD
+        </p>
       </div>
     </div>
   </div>
   <div class="col-md-4">
-    <div class="card shadow-sm">
-      <div class="card-header"><h3>Add Capital Expense</h3></div>
-      <div class="card-body">
-        <form action="{{ url_for('add_capital_expense') }}" method="post">
-          <div class="mb-3">
-            <label for="name" class="form-label">Expense Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="name"
-              name="name"
-              required
-            />
-          </div>
-          <div class="mb-3">
-            <label for="amount" class="form-label">Amount (AUD)</label>
-            <input
-              type="number"
-              step="0.01"
-              class="form-control"
-              id="amount"
-              name="amount"
-              required
-            />
-          </div>
-          <button type="submit" class="btn btn-primary w-100">
-            Add Expense
-          </button>
-        </form>
+    <div
+      class="card border-0 shadow-sm"
+      style="
+        background: linear-gradient(
+          135deg,
+          rgba(248, 80, 50, 0.1) 0%,
+          rgba(231, 56, 39, 0.1) 100%
+        );
+        border-left: 3px solid #f85032;
+      "
+    >
+      <div class="card-body text-center p-3">
+        <i class="bi bi-arrow-down-circle fs-4 text-danger mb-2"></i>
+        <h6 class="text-muted mb-2 fw-semibold small">Total Expenses</h6>
+        <p class="h4 mb-0 fw-bold text-danger">
+          {{
+          "%.2f"|format(capital.expenses_from_capital|sum(attribute='amount'))
+          }} AUD
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div
+      class="card border-0 shadow-sm"
+      style="
+        background: linear-gradient(
+          135deg,
+          rgba(11, 163, 96, 0.1) 0%,
+          rgba(60, 186, 146, 0.1) 100%
+        );
+        border-left: 3px solid #0ba360;
+      "
+    >
+      <div class="card-body text-center p-3">
+        <i class="bi bi-check-circle fs-4 text-success mb-2"></i>
+        <h6 class="text-muted mb-2 fw-semibold small">Expenses Count</h6>
+        <p class="h4 mb-0 fw-bold text-success">
+          {{ capital.expenses_from_capital|length }} items
+        </p>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Main Content -->
+<div class="row g-4">
+  <!-- Expenses Table (Wider) -->
+  <div class="col-lg-8">
+    <div class="card shadow-lg border-0">
+      <div
+        class="card-header text-white py-3"
+        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+      >
+        <h4 class="mb-0">
+          <i class="bi bi-receipt-cutoff"></i> Expenses from Capital
+          <span class="badge bg-white text-primary ms-2"
+            >{{ capital.expenses_from_capital|length }} expenses</span
+          >
+        </h4>
+      </div>
+      <div class="card-body p-0">
+        <div
+          class="table-responsive"
+          style="max-height: 500px; overflow-y: auto"
+        >
+          <table class="table table-hover mb-0">
+            <thead
+              class="sticky-top"
+              style="
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+              "
+            >
+              <tr>
+                <th class="py-3 px-4"><i class="bi bi-tag"></i> Description</th>
+                <th class="py-3 px-4 text-end">
+                  <i class="bi bi-currency-dollar"></i> Amount
+                </th>
+                <th class="py-3 px-4 text-center">
+                  <i class="bi bi-gear"></i> Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for expense in capital.expenses_from_capital %}
+              <tr>
+                <td class="py-3 px-4 fw-semibold">{{ expense.name }}</td>
+                <td class="py-3 px-4 text-end text-danger fw-semibold">
+                  {{ "%.2f"|format(expense.amount) }} AUD
+                </td>
+                <td class="py-3 px-4 text-center">
+                  <div class="btn-group btn-group-sm">
+                    <a
+                      href="{{ url_for('edit_capital_expense', index=loop.index0) }}"
+                      class="btn btn-outline-primary"
+                      title="Edit"
+                    >
+                      <i class="bi bi-pencil"></i>
+                    </a>
+                    <a
+                      href="{{ url_for('delete_item', list_name='capital_expenses', index=loop.index0) }}"
+                      class="btn btn-outline-danger"
+                      title="Delete"
+                      onclick="return confirm('Delete this expense?');"
+                    >
+                      <i class="bi bi-trash"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            <tfoot class="sticky-bottom" style="background: #f8f9fa">
+              <tr class="fw-bold">
+                <td class="py-3 px-4">Total Expenses</td>
+                <td class="py-3 px-4 text-end text-danger">
+                  {{
+                  "%.2f"|format(capital.expenses_from_capital|sum(attribute='amount'))
+                  }} AUD
+                </td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        {% if not capital.expenses_from_capital %}
+        <div class="p-5 text-center">
+          <i class="bi bi-inbox fs-1 text-muted mb-3"></i>
+          <p class="text-muted">
+            No expenses yet. Add one using the form on the right.
+          </p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Expense Form (Sidebar) -->
+  <div class="col-lg-4">
+    <div class="sticky-top" style="top: 100px">
+      <div
+        class="card shadow-lg border-0"
+        style="border-left: 5px solid #667eea"
+      >
+        <div
+          class="card-header text-white py-3"
+          style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+        >
+          <h5 class="mb-0">
+            <i class="bi bi-plus-circle-fill"></i> Add Capital Expense
+          </h5>
+        </div>
+        <div class="card-body p-4">
+          <form action="{{ url_for('add_capital_expense') }}" method="post">
+            <div class="mb-3">
+              <label for="name" class="form-label fw-semibold">
+                <i class="bi bi-tag"></i> Expense Name
+              </label>
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                id="name"
+                name="name"
+                placeholder="e.g., 1st Semester Fee, Flight Ticket"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="amount" class="form-label fw-semibold">
+                <i class="bi bi-currency-dollar"></i> Amount
+              </label>
+              <div class="input-group input-group-lg">
+                <span class="input-group-text">AUD</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control"
+                  id="amount"
+                  name="amount"
+                  placeholder="0.00"
+                  required
+                />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 py-2 shadow">
+              <i class="bi bi-check-circle"></i> Add Expense
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .table thead.sticky-top th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .table tfoot.sticky-bottom td {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+  }
+
+  .table-responsive::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  .table-responsive::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 4px;
+  }
+
+  .table tbody tr {
+    transition: all 0.2s ease;
+  }
+
+  .table tbody tr:hover {
+    background-color: rgba(102, 126, 234, 0.08);
+    transform: scale(1.01);
+  }
+</style>
+
 {% endblock %}

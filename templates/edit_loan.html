@@ -1,0 +1,163 @@
+{% extends "base.html" %} {% block title %}Edit Loan Details{% endblock %} {%
+block content %}
+<header class="mb-5">
+  <h1 class="display-5 mb-2">
+    <i class="bi bi-pencil-square text-primary"></i> Edit Loan Details
+  </h1>
+  <p class="lead text-muted">Update your loan amount and repayment schedule</p>
+</header>
+
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-lg border-0">
+      <div class="card-body p-5">
+        <form action="{{ url_for('update_loan') }}" method="post">
+          <fieldset class="mb-5">
+            <legend class="h4 fw-bold mb-4">
+              <i class="bi bi-cash-coin text-primary"></i> Loan Amount
+            </legend>
+            <div class="mb-4">
+              <label for="loan_amount_bdt" class="form-label fw-semibold">
+                <i class="bi bi-currency-exchange"></i> Loan Amount (BDT)
+              </label>
+              <div class="input-group input-group-lg">
+                <span class="input-group-text bg-light">
+                  <i class="bi bi-coin"></i>
+                </span>
+                <input
+                  type="number"
+                  step="1"
+                  class="form-control form-control-lg"
+                  id="loan_amount_bdt"
+                  name="loan_amount_bdt"
+                  value="{{ loan_data.amount_bdt }}"
+                  required
+                />
+                <span class="input-group-text bg-light fw-semibold">BDT</span>
+              </div>
+              <div class="form-text mt-2">
+                <i class="bi bi-info-circle"></i> Current exchange rate: 1 BDT =
+                {{ settings.bdt_to_aud_rate }} AUD
+              </div>
+            </div>
+
+            <div
+              class="alert alert-info border-0 shadow-sm"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  rgba(102, 126, 234, 0.1) 0%,
+                  rgba(118, 75, 162, 0.1) 100%
+                );
+              "
+            >
+              <div class="d-flex align-items-center">
+                <i
+                  class="bi bi-calculator fs-3 me-3"
+                  style="color: #667eea"
+                ></i>
+                <div>
+                  <div class="fw-semibold mb-1">Converted Amount:</div>
+                  <span
+                    id="converted_amount"
+                    class="fs-4 fw-bold"
+                    style="color: #667eea"
+                  >
+                    {{ "%.2f"|format(loan_data.amount_aud) }} AUD
+                  </span>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="mb-5">
+            <legend class="h4 fw-bold mb-4">
+              <i class="bi bi-calendar-check text-success"></i> Monthly
+              Repayment
+            </legend>
+            <div class="mb-3">
+              <label for="loan_repayment" class="form-label fw-semibold">
+                <i class="bi bi-arrow-repeat"></i> Monthly Repayment Amount
+                (AUD)
+              </label>
+              <div class="input-group input-group-lg">
+                <span class="input-group-text bg-light">
+                  <i class="bi bi-cash"></i>
+                </span>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control form-control-lg"
+                  id="loan_repayment"
+                  name="loan_repayment"
+                  value="{{ settings.default_loan_repayment }}"
+                  required
+                />
+                <span class="input-group-text bg-light fw-semibold">AUD</span>
+              </div>
+              <div class="form-text mt-2">
+                <i class="bi bi-info-circle"></i> This amount will be
+                automatically deducted from monthly savings
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="d-grid gap-3 mt-5">
+            <button type="submit" class="btn btn-primary btn-lg py-3 shadow">
+              <i class="bi bi-save fs-5"></i> Save Changes
+            </button>
+            <a
+              href="{{ url_for('loan_page') }}"
+              class="btn btn-secondary btn-lg py-3"
+            >
+              <i class="bi bi-x-circle"></i> Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Live conversion calculator with animation
+  const loanInput = document.getElementById('loan_amount_bdt');
+  const convertedSpan = document.getElementById('converted_amount');
+  const exchangeRate = {{ settings.bdt_to_aud_rate }};
+
+  loanInput.addEventListener('input', function() {
+    const bdtAmount = parseFloat(this.value) || 0;
+    const audAmount = (bdtAmount * exchangeRate).toFixed(2);
+
+    // Add animation effect
+    convertedSpan.style.transform = 'scale(1.1)';
+    convertedSpan.textContent = audAmount + ' AUD';
+
+    setTimeout(() => {
+      convertedSpan.style.transform = 'scale(1)';
+    }, 200);
+  });
+
+  // Add smooth transition
+  convertedSpan.style.transition = 'transform 0.2s ease';
+</script>
+
+<style>
+  .form-control:focus,
+  .input-group-text {
+    border-color: #667eea;
+  }
+
+  .input-group-text {
+    transition: all 0.3s ease;
+  }
+
+  .form-control:focus + .input-group-text,
+  .form-control:focus ~ .input-group-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    border-color: #667eea;
+  }
+</style>
+
+{% endblock %}

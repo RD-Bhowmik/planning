@@ -1,48 +1,319 @@
 {% extends "base.html" %} {% block title %}Capital Sources{% endblock %} {%
 block content %}
-<header class="d-flex justify-content-between align-items-center mb-4">
+<header class="d-flex justify-content-between align-items-center mb-5">
   <div>
-    <h1 class="display-5">Capital Sources</h1>
-    <p class="lead text-muted">
-      Your initial funding in BDT and converted AUD.
+    <h1 class="display-5 mb-2">
+      <i class="bi bi-wallet2 text-primary"></i> Capital Sources
+    </h1>
+    <p class="lead text-muted mb-0">
+      Your initial funding in BDT and converted to AUD
     </p>
   </div>
-  <a href="{{ url_for('edit_sources_page') }}" class="btn btn-primary"
-    ><i class="bi bi-pencil-square"></i> Edit Sources & Rate</a
+  <a
+    href="{{ url_for('edit_sources_page') }}"
+    class="btn btn-primary btn-lg shadow"
   >
+    <i class="bi bi-pencil-square"></i> Edit Sources & Rate
+  </a>
 </header>
 
-<div class="row justify-content-center">
-  {% for source in capital.sources %}
+<div class="row g-4 mb-5">
+  {% set colors = [ 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  'linear-gradient(135deg, #0ba360 0%, #3cba92 100%)', 'linear-gradient(135deg,
+  #f093fb 0%, #f5576c 100%)' ] %} {% for source in capital.sources %}
   <div class="col-md-4">
-    <div class="card text-center shadow-sm">
-      <div class="card-header">
-        <h2 class="card-title mb-0">{{ source.name }}</h2>
+    <div class="card h-100 border-0 shadow-lg" style="overflow: hidden">
+      <div
+        class="card-header text-white text-center py-4"
+        style="background: {{ colors[loop.index0 % 3] }};"
+      >
+        <i
+          class="bi bi-{% if source.name == 'Parents' %}heart-fill{% elif source.name == 'Jethu' %}people-fill{% else %}bank{% endif %} fs-1"
+        ></i>
+        <h2 class="mt-3 mb-0 fw-bold">{{ source.name }}</h2>
       </div>
-      <div class="card-body">
-        <p class="card-text display-5 text-primary">
-          {{ "%.2f"|format(source.amount_aud) }}
-          <span class="fs-5 text-muted">AUD</span>
-        </p>
-        <p class="text-muted">{{ "{:,.0f}".format(source.amount_bdt) }} BDT</p>
+      <div class="card-body text-center p-4">
+        <div class="mb-3">
+          <p
+            class="display-4 fw-bold mb-2"
+            style="background: {{ colors[loop.index0 % 3] }}; -webkit-background-clip: text; -webkit-text-fill-color: transparent;"
+          >
+            {{ "%.2f"|format(source.amount_aud) }}
+          </p>
+          <span class="fs-5 text-muted fw-semibold">AUD</span>
+        </div>
+        <div class="p-3 rounded" style="background: rgba(102, 126, 234, 0.05)">
+          <p class="h5 text-muted mb-0">
+            <i class="bi bi-currency-exchange"></i> {{
+            "{:,.0f}".format(source.amount_bdt) }} BDT
+          </p>
+        </div>
       </div>
     </div>
   </div>
   {% endfor %}
 </div>
 
-<div class="card bg-light text-center mt-4">
-  <div class="card-body">
-    <h3 class="card-title">Total Initial Capital</h3>
-    <p class="display-4 text-success fw-bold">
-      {{ "%.2f"|format(capital.total_capital_aud) }} AUD
-    </p>
-    <p class="h5 text-muted fw-normal">
-      {{ "{:,.0f}".format(capital.sources|sum(attribute='amount_bdt')) }} BDT
-    </p>
-    <small class="text-muted"
-      >Calculated at a rate of 1 BDT = {{ settings.bdt_to_aud_rate }} AUD</small
+<div class="row g-4 mb-4">
+  <div class="col-lg-6">
+    <div
+      class="card shadow-lg border-0 h-100"
+      style="
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.05) 0%,
+          rgba(118, 75, 162, 0.05) 100%
+        );
+      "
     >
+      <div class="card-body text-center p-5">
+        <div class="mb-4">
+          <i
+            class="bi bi-piggy-bank-fill fs-1"
+            style="
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+            "
+          ></i>
+        </div>
+        <h3 class="fw-bold mb-3">Total Initial Capital</h3>
+        <p
+          class="display-3 fw-bold mb-3"
+          style="
+            background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          "
+        >
+          {{ "%.2f"|format(capital.total_capital_aud) }} AUD
+        </p>
+        <p class="h4 text-muted mb-4">
+          {{ "{:,.0f}".format(capital.sources|sum(attribute='amount_bdt')) }}
+          BDT
+        </p>
+        <div
+          class="alert alert-light border-0 d-inline-block px-4 py-3 shadow-sm"
+        >
+          <i class="bi bi-info-circle-fill text-primary"></i>
+          <small class="fw-semibold"
+            >Calculated at rate: 1 BDT = {{ settings.bdt_to_aud_rate }}
+            AUD</small
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div
+      class="card shadow-lg border-0 h-100"
+      style="
+        background: linear-gradient(
+          135deg,
+          rgba(11, 163, 96, 0.05) 0%,
+          rgba(60, 186, 146, 0.05) 100%
+        );
+      "
+    >
+      <div class="card-body p-5">
+        <div class="text-center mb-4">
+          <i
+            class="bi bi-arrow-left-right fs-1"
+            style="
+              background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+            "
+          ></i>
+        </div>
+        <h3 class="fw-bold text-center mb-4">Exchange Rate</h3>
+
+        <div class="text-center mb-4">
+          <p class="h5 text-muted mb-2">1 BDT =</p>
+          <p
+            id="current-rate-display"
+            class="display-4 fw-bold"
+            style="
+              background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+            "
+          >
+            {{ settings.bdt_to_aud_rate }} AUD
+          </p>
+        </div>
+
+        <div
+          id="rate-status"
+          class="alert alert-light border-0 shadow-sm mb-4"
+          style="background: white"
+        >
+          <div class="d-flex align-items-center justify-content-center">
+            <i class="bi bi-clock-history me-2"></i>
+            <small class="fw-semibold">
+              {% if settings.get('exchange_rate_last_updated') %} Last updated:
+              {{ settings.exchange_rate_last_updated[:19] }}
+              <span class="badge bg-success ms-2"
+                >{{ settings.get('exchange_rate_source', 'ExchangeRate-API')
+                }}</span
+              >
+              {% else %} Click below to fetch the latest rate {% endif %}
+            </small>
+          </div>
+        </div>
+
+        <div id="rate-message" class="mb-3"></div>
+
+        <div class="d-grid">
+          <button
+            type="button"
+            class="btn btn-success btn-lg py-3 shadow"
+            id="fetchRateBtn"
+            onclick="fetchExchangeRate()"
+          >
+            <i class="bi bi-arrow-clockwise"></i> Fetch Current Rate
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+<script>
+  async function fetchExchangeRate() {
+    const fetchBtn = document.getElementById("fetchRateBtn");
+    const rateDisplay = document.getElementById("current-rate-display");
+    const rateStatus = document.getElementById("rate-status");
+    const messageDiv = document.getElementById("rate-message");
+
+    // Disable button and show loading
+    fetchBtn.disabled = true;
+    fetchBtn.innerHTML =
+      '<span class="spinner-border spinner-border-sm me-2"></span> Fetching...';
+    messageDiv.innerHTML = "";
+
+    try {
+      const response = await fetch("/api/fetch_exchange_rate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Update the rate display with animation
+        rateDisplay.style.transform = "scale(1.1)";
+        rateDisplay.textContent = data.rate + " AUD";
+        setTimeout(() => {
+          rateDisplay.style.transform = "scale(1)";
+        }, 300);
+
+        // Show success message
+        messageDiv.innerHTML = `
+          <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-check-circle-fill fs-4 me-3"></i>
+              <div>
+                <strong>Success!</strong> Exchange rate updated. Refreshing page...
+              </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        `;
+
+        // Update status
+        rateStatus.innerHTML = `
+          <div class="d-flex align-items-center justify-content-center">
+            <i class="bi bi-clock-history me-2"></i>
+            <small class="fw-semibold">
+              Last updated: ${data.formatted_time}
+              <span class="badge bg-success ms-2">ExchangeRate-API</span>
+            </small>
+          </div>
+        `;
+
+        // Reload page after 1.5 seconds to show updated amounts
+        setTimeout(() => {
+          location.reload();
+        }, 1500);
+      } else {
+        // Show error message
+        messageDiv.innerHTML = `
+          <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
+              <div>
+                <strong>Error!</strong> ${data.error}
+              </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        `;
+
+        // Re-enable button on error
+        fetchBtn.disabled = false;
+        fetchBtn.innerHTML =
+          '<i class="bi bi-arrow-clockwise"></i> Fetch Current Rate';
+      }
+    } catch (error) {
+      // Show network error
+      messageDiv.innerHTML = `
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+          <div class="d-flex align-items-center">
+            <i class="bi bi-wifi-off fs-4 me-3"></i>
+            <div>
+              <strong>Network Error!</strong> ${error.message}
+            </div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      `;
+
+      // Re-enable button on error
+      fetchBtn.disabled = false;
+      fetchBtn.innerHTML =
+        '<i class="bi bi-arrow-clockwise"></i> Fetch Current Rate';
+    }
+  }
+
+  // Add smooth transition to rate display
+  document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("current-rate-display").style.transition =
+      "transform 0.3s ease";
+  });
+</script>
+
+<style>
+  .card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .card:hover {
+    transform: translateY(-10px) scale(1.02);
+  }
+
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .alert {
+    animation: slideInUp 0.4s ease;
+  }
+
+  .spinner-border {
+    width: 1rem;
+    height: 1rem;
+  }
+</style>
+
 {% endblock %}

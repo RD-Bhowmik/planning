@@ -5,9 +5,11 @@
     "program_duration_semesters": 4
   },
   "settings": {
-    "tax_rate_percent": 30.0,
+    "tax_rate_percent": 15.5,
     "default_loan_repayment": 253.67,
-    "bdt_to_aud_rate": 0.013
+    "bdt_to_aud_rate": 0.0126,
+    "exchange_rate_last_updated": "2025-10-14T04:37:16.186166",
+    "exchange_rate_source": "ExchangeRate-API"
   },
   "financial_summary": {
     "currency": "AUD"
@@ -35,7 +37,7 @@
       },
       {
         "name": "2nd Semester fee",
-        "amount": 16470.0
+        "amount": 19200.0
       },
       {
         "name": "august accommodation ",
@@ -69,96 +71,107 @@
   },
   "monthly_cash_flow": [
     {
-      "month": "2025-07",
-      "income": 1344.0,
-      "loan_repayment": 253.67
-    },
-    {
-      "month": "2025-08",
-      "income": 1344.0,
-      "loan_repayment": 253.67
-    },
-    {
-      "month": "2025-09",
-      "income": 1680.0,
-      "loan_repayment": 253.67
-    },
-    {
-      "month": "2025-10",
-      "income": 2016.0,
-      "loan_repayment": 253.67
-    },
-    {
-      "month": "2025-11",
-      "income": 2500.0,
-      "loan_repayment": 253.67
-    },
-    {
-      "month": "2025-12",
-      "income": 2800.0,
-      "loan_repayment": 253.67
-    },
-    {
-      "month": "2026-01",
-      "income": 3500.0,
-      "loan_repayment": 253.67
-    },
-    {
-      "month": "2026-02",
-      "income": 1820.0,
-      "loan_repayment": 253.67
-    },
-    {
-      "month": "2026-03",
-      "income": 1680.0,
-      "loan_repayment": 253.67
-    },
-    {
-      "month": "2026-04",
-      "income": 1750.0,
-      "loan_repayment": 253.67
-    },
-    {
-      "month": "2026-05",
-      "income": 2100.0,
-      "loan_repayment": 253.67
-    },
-    {
-      "month": "2026-06",
-      "income": 2100.0,
-      "loan_repayment": 253.67
-    },
-    {
       "month": "2026-07",
-      "income": 2170.0,
+      "income": 1352.0,
       "loan_repayment": 253.67
     },
     {
       "month": "2026-08",
-      "income": 2100.0,
+      "income": 1352.5,
       "loan_repayment": 253.67
     },
     {
       "month": "2026-09",
-      "income": 1820.0,
+      "income": 1690.0,
       "loan_repayment": 253.67
     },
     {
       "month": "2026-10",
-      "income": 2170.0,
+      "income": 2028.0,
       "loan_repayment": 253.67
     },
     {
       "month": "2026-11",
-      "income": 2205.0,
+      "income": 6000.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2026-12",
+      "income": 7098.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2027-01",
+      "income": 7098.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2027-02",
+      "income": 2028.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2027-03",
+      "income": 2028.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2027-04",
+      "income": 2028.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2027-05",
+      "income": 2028.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2027-06",
+      "income": 6000.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2027-07",
+      "income": 2028.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2027-08",
+      "income": 2028.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2027-09",
+      "income": 2028.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2027-10",
+      "income": 2028.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2027-11",
+      "income": 5070.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2027-12",
+      "income": 7098.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2028-01",
+      "income": 7098.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2028-02",
+      "income": 2028.0,
       "loan_repayment": 253.67
     }
   ],
   "expenses_from_savings": [
-    {
-      "name": "3rd semester fee",
-      "amount": 16470.0
-    },
     {
       "name": "march accmmodation",
       "amount": 2000.0
@@ -174,6 +187,10 @@
     {
       "name": "june accmmodation",
       "amount": 2000.0
+    },
+    {
+      "name": "3rd semester fee",
+      "amount": 19200.0
     },
     {
       "name": "July accommodation",
@@ -193,6 +210,22 @@
     },
     {
       "name": "november accmmodation",
+      "amount": 2000.0
+    },
+    {
+      "name": "december accmmodation",
+      "amount": 2000.0
+    },
+    {
+      "name": "january accmmodation",
+      "amount": 2000.0
+    },
+    {
+      "name": "4th semester fee",
+      "amount": 19200.0
+    },
+    {
+      "name": "february accmmodation",
       "amount": 2000.0
     }
   ],
