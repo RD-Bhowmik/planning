@@ -1,0 +1,69 @@
+{% extends "base.html" %} {% block title %}Monthly Income Summary{% endblock %}
+{% block content %}
+<header class="mb-4">
+  <h1 class="display-5">Monthly Income Summary</h1>
+  <p class="lead text-muted">
+    Review your daily income by month and transfer it to your savings.
+  </p>
+</header>
+
+{% for month_key, data in daily_income_by_month %}
+<div class="card shadow-sm mb-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h3 class="mb-0">
+      {{ datetime.strptime(month_key, '%Y-%m').strftime('%B %Y') }}
+    </h3>
+    <div>
+      <span class="badge bg-light text-dark me-2"
+        >Total Net Income: {{ "%.2f"|format(data.total_net) }} AUD</span
+      >
+      {% if month_key in processed_months %}
+      <button class="btn btn-success disabled">
+        <i class="bi bi-check-circle-fill"></i> Added to Savings
+      </button>
+      {% else %}
+      <form
+        action="{{ url_for('process_month', month_key=month_key) }}"
+        method="post"
+        class="d-inline"
+      >
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-arrow-right-circle-fill"></i> Add to Savings
+        </button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+  <div class="card-body">
+    <table class="table table-sm table-hover">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Gross Income</th>
+          <th>Net Income</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in data.entries %}
+        <tr>
+          <td>{{ entry.date }}</td>
+          <td>{{ "%.2f"|format(entry.gross_income) }} AUD</td>
+          <td>
+            {{ "%.2f"|format(calculate_net_income(entry.gross_income,
+            settings.tax_rate_percent)) }} AUD
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endfor %} {% if not daily_income_by_month %}
+<div class="alert alert-info">
+  You have no daily income entries yet. Go to the
+  <a href="{{ url_for('daily_tracker_page') }}">Daily Tracker</a> to add some.
+</div>
+{% endif %} {% endblock %}
+
+
+

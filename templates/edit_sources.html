@@ -1,0 +1,52 @@
+{% extends "base.html" %} {% block title %}Edit Capital Sources{% endblock %} {%
+block content %}
+<header class="mb-4">
+  <h1 class="display-5">Edit Capital Sources & Exchange Rate</h1>
+</header>
+<div class="card shadow-sm">
+  <div class="card-body">
+    <form action="{{ url_for('update_sources') }}" method="post">
+      <fieldset class="mb-4">
+        <legend>Source Amounts (BDT)</legend>
+        {% for source in capital.sources %}
+        <div class="mb-3">
+          <label for="{{ source.name }}" class="form-label"
+            >{{ source.name }}</label
+          >
+          <input
+            type="number"
+            step="1"
+            class="form-control"
+            id="{{ source.name }}"
+            name="{{ source.name }}"
+            value="{{ source.amount_bdt }}"
+          />
+        </div>
+        {% endfor %}
+      </fieldset>
+
+      <fieldset>
+        <legend>Exchange Rate</legend>
+        <div class="mb-3">
+          <label for="bdt_to_aud_rate" class="form-label">1 BDT to AUD</label>
+          <input
+            type="number"
+            step="0.000001"
+            class="form-control"
+            id="bdt_to_aud_rate"
+            name="bdt_to_aud_rate"
+            value="{{ settings.bdt_to_aud_rate }}"
+          />
+        </div>
+      </fieldset>
+
+      <div class="d-grid gap-2 mt-4">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a href="{{ url_for('sources_page') }}" class="btn btn-secondary"
+          >Cancel</a
+        >
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

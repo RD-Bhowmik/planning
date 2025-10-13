@@ -1,0 +1,200 @@
+{
+  "profile": {
+    "name": "User",
+    "university": "Swinburne University of Technology",
+    "program_duration_semesters": 4
+  },
+  "settings": {
+    "tax_rate_percent": 30.0,
+    "default_loan_repayment": 253.67,
+    "bdt_to_aud_rate": 0.013
+  },
+  "financial_summary": {
+    "currency": "AUD"
+  },
+  "capital": {
+    "sources": [
+      {
+        "name": "Parents",
+        "amount_bdt": 2365000
+      },
+      {
+        "name": "Jethu",
+        "amount_bdt": 1500000
+      },
+      {
+        "name": "Loan",
+        "amount_bdt": 1000000
+      }
+    ],
+    "total_capital_aud": 67500.82,
+    "expenses_from_capital": [
+      {
+        "name": "total payment before departing with 1st semester fee",
+        "amount": 25000.0
+      },
+      {
+        "name": "2nd Semester fee",
+        "amount": 16470.0
+      },
+      {
+        "name": "august accommodation ",
+        "amount": 2000.0
+      },
+      {
+        "name": "september accommodation",
+        "amount": 2000.0
+      },
+      {
+        "name": "october accommodation",
+        "amount": 2000.0
+      },
+      {
+        "name": "november accmmodation",
+        "amount": 2000.0
+      },
+      {
+        "name": "december accmmodation",
+        "amount": 2000.0
+      },
+      {
+        "name": "january accmmodation",
+        "amount": 2000.0
+      },
+      {
+        "name": "february accmmodation",
+        "amount": 2000.0
+      }
+    ]
+  },
+  "monthly_cash_flow": [
+    {
+      "month": "2025-07",
+      "income": 1344.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2025-08",
+      "income": 1344.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2025-09",
+      "income": 1680.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2025-10",
+      "income": 2016.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2025-11",
+      "income": 2500.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2025-12",
+      "income": 2800.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2026-01",
+      "income": 3500.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2026-02",
+      "income": 1820.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2026-03",
+      "income": 1680.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2026-04",
+      "income": 1750.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2026-05",
+      "income": 2100.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2026-06",
+      "income": 2100.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2026-07",
+      "income": 2170.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2026-08",
+      "income": 2100.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2026-09",
+      "income": 1820.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2026-10",
+      "income": 2170.0,
+      "loan_repayment": 253.67
+    },
+    {
+      "month": "2026-11",
+      "income": 2205.0,
+      "loan_repayment": 253.67
+    }
+  ],
+  "expenses_from_savings": [
+    {
+      "name": "3rd semester fee",
+      "amount": 16470.0
+    },
+    {
+      "name": "march accmmodation",
+      "amount": 2000.0
+    },
+    {
+      "name": "april accmmodation",
+      "amount": 2000.0
+    },
+    {
+      "name": "may accmmodation",
+      "amount": 2000.0
+    },
+    {
+      "name": "june accmmodation",
+      "amount": 2000.0
+    },
+    {
+      "name": "July accommodation",
+      "amount": 2000.0
+    },
+    {
+      "name": "august accommodation ",
+      "amount": 2000.0
+    },
+    {
+      "name": "september accommodation",
+      "amount": 2000.0
+    },
+    {
+      "name": "october accommodation",
+      "amount": 2000.0
+    },
+    {
+      "name": "november accmmodation",
+      "amount": 2000.0
+    }
+  ],
+  "daily_income_tracker": []
+}

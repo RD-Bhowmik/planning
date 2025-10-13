@@ -1,0 +1,191 @@
+{% extends "base.html" %} {% block title %}Savings Management{% endblock %} {%
+block content %}
+<header class="mb-4">
+  <h1 class="display-5">Savings Management</h1>
+  <p class="lead text-muted">
+    Track your monthly income, savings, and related expenses.
+  </p>
+</header>
+
+<div class="card mb-4 shadow-sm">
+  <div class="card-header"><h3>Savings Summary</h3></div>
+  <div class="card-body">
+    <div class="row text-center">
+      <div class="col-md-4">
+        <h5>Gross Savings</h5>
+        <p class="display-5 text-info">
+          {{ "%.2f"|format(total_savings) }} AUD
+        </p>
+      </div>
+      <div class="col-md-4">
+        <h5>Total Deductions</h5>
+        <p class="display-5 text-danger">
+          {{ "%.2f"|format(total_expenses_from_savings) }} AUD
+        </p>
+      </div>
+      <div class="col-md-4">
+        <h5>Net Savings</h5>
+        <p class="display-5 text-primary fw-bold">
+          {{ "%.2f"|format(net_savings) }} AUD
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="card shadow-sm mb-4">
+      <div class="card-header"><h3>Monthly Cash Flow</h3></div>
+      <div class="card-body">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Income</th>
+              <th>Loan Repayment</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in monthly_cash_flow %}
+            <tr>
+              <td>
+                {{ datetime.strptime(entry.month, '%Y-%m').strftime('%B %Y') }}
+              </td>
+              <td>{{ "%.2f"|format(entry.income) }}</td>
+              <td>{{ "%.2f"|format(entry.loan_repayment) }}</td>
+              <td>
+                <a
+                  href="{{ url_for('edit_monthly_entry', index=loop.index0) }}"
+                  class="btn btn-secondary btn-sm"
+                  ><i class="bi bi-pencil"></i
+                ></a>
+                <a
+                  href="{{ url_for('delete_item', list_name='monthly_cash_flow', index=loop.index0) }}"
+                  class="btn btn-danger btn-sm"
+                  ><i class="bi bi-trash"></i
+                ></a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card shadow-sm">
+      <div class="card-header"><h3>Expenses From Savings</h3></div>
+      <div class="card-body">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Amount</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for expense in expenses_from_savings %}
+            <tr>
+              <td>{{ expense.name }}</td>
+              <td>{{ "%.2f"|format(expense.amount) }}</td>
+              <td>
+                <a
+                  href="{{ url_for('edit_savings_expense', index=loop.index0) }}"
+                  class="btn btn-secondary btn-sm"
+                  ><i class="bi bi-pencil"></i
+                ></a>
+                <a
+                  href="{{ url_for('delete_item', list_name='expenses_from_savings', index=loop.index0) }}"
+                  class="btn btn-danger btn-sm"
+                  ><i class="bi bi-trash"></i
+                ></a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card shadow-sm">
+      <div class="card-header"><h3>Add Savings Expense</h3></div>
+      <div class="card-body">
+        <form action="{{ url_for('add_saving_expense') }}" method="post">
+          <div class="mb-3">
+            <label for="name" class="form-label">Expense Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              name="name"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="amount" class="form-label">Amount</label>
+            <input
+              type="number"
+              class="form-control"
+              id="amount"
+              name="amount"
+              step="0.01"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary w-100">
+            Add Expense
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="card shadow-sm">
+      <div class="card-header"><h3>Add Monthly Lump Sum</h3></div>
+      <div class="card-body">
+        <form
+          action="{{ url_for('add_lump_sum_monthly_income') }}"
+          method="post"
+        >
+          <div class="mb-3">
+            <label class="form-label">For Month</label>
+            <div class="input-group">
+              <select class="form-select" name="month" required>
+                <option selected disabled value="">Month...</option>
+                {% for month in months %}
+                <option value="{{ month.value }}">{{ month.name }}</option>
+                {% endfor %}
+              </select>
+              <select class="form-select" name="year" required>
+                <option selected disabled value="">Year...</option>
+                {% for year in years %}
+                <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="gross_income" class="form-label"
+              >Gross Monthly Income</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="gross_income"
+              name="gross_income"
+              step="0.01"
+              required
+            />
+          </div>
+          <div class="form-text mb-3">
+            Tax and default loan repayment will be deducted automatically.
+          </div>
+          <button type="submit" class="btn btn-info w-100">
+            Add Lump Sum to Savings
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
