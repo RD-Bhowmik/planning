@@ -723,6 +723,12 @@ def set_currency(currency):
         financial_data = load_financial_data(is_guest=True, guest_data=session.get('guest_financial_data'))
     
     financial_data['settings']['target_currency'] = currency
+    
+    # Update current_rate if we have the rate for this currency
+    rate_key = f'bdt_to_{currency.lower()}_rate'
+    if rate_key in financial_data['settings']:
+        financial_data['settings']['current_rate'] = financial_data['settings'][rate_key]
+    
     save_user_financial_data(financial_data)
     
     flash(f'Currency changed to {currency} successfully!', 'success')
@@ -750,6 +756,10 @@ def fetch_exchange_rate():
             rate_key = f'bdt_to_{currency.lower()}_rate'
             financial_data['settings'][rate_key] = result['rate']
             results[currency] = result['rate']
+    
+    # Update the current_rate based on target currency
+    if target_currency in results:
+        financial_data['settings']['current_rate'] = results[target_currency]
     
     # Update timestamp
     financial_data['settings']['exchange_rate_last_updated'] = datetime.now().isoformat()
