@@ -1,14 +1,17 @@
 """
 Financial data storage - supports both PostgreSQL and JSON fallback
+WITH CONNECTION POOLING AND CACHING for better performance
 """
 import json
 import os
 from modules.db_config import DB_TYPE, DATABASE_URL
+from modules.cache import get_cached, set_cache, invalidate_user_cache
 
 # Import appropriate database driver
 if DB_TYPE == 'postgres':
     import psycopg2
     from psycopg2.extras import RealDictCursor, Json
+    from modules.db_pool import get_connection, return_connection
 
 def init_financial_tables():
     """Initialize financial data tables in PostgreSQL"""
@@ -75,9 +78,17 @@ def get_default_financial_data():
     }
 
 def load_financial_data_postgres(user_id):
-    """Load financial data from PostgreSQL"""
+    """Load financial data from PostgreSQL with caching"""
+    # Try cache first
+    cache_key = f"financial_data:{user_id}"
+    cached_data = get_cached(cache_key)
+    if cached_data is not None:
+        return cached_data
+    
+    # If not in cache, load from database
+    conn = None
     try:
-        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        conn = get_connection()  # Get from connection pool
         cursor = conn.cursor(cursor_factory=RealDictCursor)
         
         cursor.execute('''
@@ -87,10 +98,9 @@ def load_financial_data_postgres(user_id):
         ''', (user_id,))
         
         result = cursor.fetchone()
-        conn.close()
         
         if result:
-            return {
+            data = {
                 "profile": result['profile'] or {},
                 "settings": result['settings'] or {},
                 "capital": result['capital'] or {"sources": [], "expenses_from_capital": []},
@@ -98,6 +108,9 @@ def load_financial_data_postgres(user_id):
                 "expenses_from_savings": result['expenses_from_savings'] or [],
                 "daily_income_tracker": result['daily_income_tracker'] or []
             }
+            # Cache the result for 30 seconds
+            set_cache(cache_key, data, ttl=30)
+            return data
         else:
             # Create default data for new user
             default_data = get_default_financial_data()
@@ -107,11 +120,15 @@ def load_financial_data_postgres(user_id):
     except Exception as e:
         print(f"Error loading financial data from PostgreSQL: {e}")
         return None
+    finally:
+        if conn:
+            return_connection(conn)  # Return to pool
 
 def save_financial_data_postgres(user_id, data):
-    """Save financial data to PostgreSQL"""
+    """Save financial data to PostgreSQL and invalidate cache"""
+    conn = None
     try:
-        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        conn = get_connection()  # Get from connection pool
         cursor = conn.cursor()
         
         cursor.execute('''
@@ -139,12 +156,20 @@ def save_financial_data_postgres(user_id, data):
         ))
         
         conn.commit()
-        conn.close()
+        
+        # Invalidate cache for this user
+        invalidate_user_cache(user_id)
+        
         return True
         
     except Exception as e:
         print(f"Error saving financial data to PostgreSQL: {e}")
+        if conn:
+            conn.rollback()
         return False
+    finally:
+        if conn:
+            return_connection(conn)  # Return to pool
 
 def load_financial_data_json(user_id=None, is_guest=False, guest_data=None):
     """Load financial data from JSON files (fallback for local/SQLite)"""

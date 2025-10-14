@@ -8,6 +8,7 @@ from modules.db_config import DB_TYPE, DATABASE_URL
 if DB_TYPE == 'postgres':
     import psycopg2
     from psycopg2.extras import RealDictCursor
+    from modules.db_pool import get_connection, return_connection
 else:
     import sqlite3
 
@@ -20,11 +21,18 @@ class User(UserMixin):
         self.created_at = created_at
 
 def get_db_connection():
-    """Get database connection based on DB_TYPE"""
+    """Get database connection based on DB_TYPE (uses pool for postgres)"""
     if DB_TYPE == 'postgres':
-        return psycopg2.connect(DATABASE_URL, sslmode='require')
+        return get_connection()  # Get from connection pool
     else:
         return sqlite3.connect(DATABASE_URL)
+
+def close_db_connection(conn):
+    """Close or return database connection to pool"""
+    if DB_TYPE == 'postgres':
+        return_connection(conn)  # Return to pool
+    else:
+        conn.close()  # Close SQLite connection
 
 def init_db():
     """Initialize the user database"""
@@ -60,7 +68,7 @@ def init_db():
             ''')
         
         conn.commit()
-        conn.close()
+        close_db_connection(conn)
         
         # Only chmod on local SQLite
         if DB_TYPE == 'sqlite' and not os.environ.get('VERCEL') and os.path.exists(DATABASE_URL):
@@ -99,7 +107,7 @@ def create_user(username, email, password):
             user_id = cursor.lastrowid
         
         conn.commit()
-        conn.close()
+        close_db_connection(conn)
         
         return True, user_id
     except Exception as e:
@@ -128,7 +136,7 @@ def verify_user(username, password):
             ''', (username,))
         
         result = cursor.fetchone()
-        conn.close()
+        close_db_connection(conn)
         
         if result is None:
             return False, "Invalid username or password"
@@ -174,7 +182,7 @@ def get_user_by_id(user_id):
             ''', (user_id,))
         
         result = cursor.fetchone()
-        conn.close()
+        close_db_connection(conn)
         
         if result:
             # Format created_at
@@ -209,7 +217,7 @@ def get_user_by_username(username):
             ''', (username,))
         
         result = cursor.fetchone()
-        conn.close()
+        close_db_connection(conn)
         
         if result:
             # Format created_at

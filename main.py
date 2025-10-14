@@ -40,6 +40,10 @@ def load_user(user_id):
 # Initialize database
 init_db()
 
+# Initialize connection pool (for PostgreSQL) - SPEEDS UP DATABASE QUERIES
+from modules.db_pool import init_connection_pool
+init_connection_pool()
+
 # Initialize financial data tables (for PostgreSQL)
 from modules.financial_db import init_financial_tables
 init_financial_tables()
