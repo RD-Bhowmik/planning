@@ -535,6 +535,42 @@ def edit_monthly_entry(index):
     entry_year, entry_month = item['month'].split('-')
     return render_template('edit_monthly_entry.html', entry=item, index=index, entry_year=int(entry_year), entry_month=entry_month)
 
+@app.route('/savings/edit_by_month/<string:month>', methods=['GET', 'POST'])
+def edit_monthly_entry_by_month(month):
+    """Edit monthly cash flow entry by month identifier"""
+    if current_user.is_authenticated:
+        financial_data = load_financial_data(user_id=current_user.id)
+    else:
+        financial_data = load_financial_data(is_guest=True, guest_data=session.get('guest_financial_data'))
+    
+    # Find the entry with matching month
+    monthly_cash_flow = financial_data['monthly_cash_flow']
+    entry_index = None
+    item = None
+    
+    for i, entry in enumerate(monthly_cash_flow):
+        if entry['month'] == month:
+            entry_index = i
+            item = entry
+            break
+    
+    if item is None:
+        flash(f'Entry not found for {month}', 'error')
+        return redirect(url_for('savings_page'))
+    
+    if request.method == 'POST':
+        year = request.form['year']
+        month_num = request.form['month']
+        financial_data['monthly_cash_flow'][entry_index]['month'] = f"{year}-{month_num}"
+        financial_data['monthly_cash_flow'][entry_index]['income'] = float(request.form['income'])
+        financial_data['monthly_cash_flow'][entry_index]['loan_repayment'] = float(request.form['loan_repayment'])
+        save_user_financial_data(financial_data)
+        flash(f'Monthly entry updated successfully!', 'success')
+        return redirect(url_for('savings_page'))
+
+    entry_year, entry_month = item['month'].split('-')
+    return render_template('edit_monthly_entry.html', entry=item, index=entry_index, entry_year=int(entry_year), entry_month=entry_month)
+
 @app.route('/savings/edit_expense/<int:index>', methods=['GET', 'POST'])
 def edit_savings_expense(index):
     if current_user.is_authenticated:
@@ -593,6 +629,30 @@ def delete_item(list_name, index):
         return redirect(url_for(redirect_page))
     
     return "Error: List not found or index out of bounds", 404
+
+# --- Delete by identifier (for sorted lists) ---
+@app.route('/delete_by_month/<string:month>')
+def delete_by_month(month):
+    """Delete monthly cash flow entry by month identifier"""
+    if current_user.is_authenticated:
+        financial_data = load_financial_data(user_id=current_user.id)
+    else:
+        financial_data = load_financial_data(is_guest=True, guest_data=session.get('guest_financial_data'))
+    
+    # Find and remove the entry with matching month
+    monthly_cash_flow = financial_data['monthly_cash_flow']
+    original_length = len(monthly_cash_flow)
+    
+    # Remove entry with matching month
+    financial_data['monthly_cash_flow'] = [entry for entry in monthly_cash_flow if entry['month'] != month]
+    
+    if len(financial_data['monthly_cash_flow']) < original_length:
+        save_user_financial_data(financial_data)
+        flash(f'Monthly entry for {month} deleted successfully!', 'success')
+    else:
+        flash(f'Entry not found for {month}', 'error')
+    
+    return redirect(url_for('savings_page'))
 
 # --- Loan Management Routes ---
 @app.route('/loan')

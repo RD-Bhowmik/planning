@@ -19,16 +19,16 @@
   "capital": {
     "sources": [
       {
-        "name": "Parents",
-        "amount_bdt": 2365000
-      },
-      {
         "name": "Jethu",
         "amount_bdt": 1500000
       },
       {
         "name": "Loan",
         "amount_bdt": 1000000
+      },
+      {
+        "name": "Parents",
+        "amount_bdt": 2365000
       }
     ],
     "expenses_from_capital": [
@@ -72,38 +72,28 @@
   },
   "monthly_cash_flow": [
     {
-      "month": "2026-07",
-      "income": 1500.0,
-      "loan_repayment": 255.48
-    },
-    {
-      "month": "2026-08",
-      "income": 2000.0,
-      "loan_repayment": 255.48
-    },
-    {
-      "month": "2026-09",
-      "income": 2400.0,
-      "loan_repayment": 255.48
-    },
-    {
       "month": "2026-10",
       "income": 2600.0,
       "loan_repayment": 255.48
     },
     {
       "month": "2026-11",
-      "income": 4500.0,
+      "income": 5500.0,
       "loan_repayment": 255.48
     },
     {
       "month": "2026-12",
-      "income": 7500.0,
+      "income": 7000.0,
       "loan_repayment": 255.48
     },
     {
       "month": "2027-01",
-      "income": 8400.0,
+      "income": 8000.0,
+      "loan_repayment": 255.48
+    },
+    {
+      "month": "2026-09",
+      "income": 2000.0,
       "loan_repayment": 255.48
     }
   ],
