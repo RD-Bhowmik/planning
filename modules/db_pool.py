@@ -16,6 +16,7 @@ def init_connection_pool():
     global _connection_pool
     
     if DB_TYPE != 'postgres':
+        print("⊘ Skipping connection pool (not using PostgreSQL)")
         return None
     
     try:
@@ -28,35 +29,55 @@ def init_connection_pool():
         print("✓ PostgreSQL connection pool initialized (1-10 connections)")
         return _connection_pool
     except Exception as e:
-        print(f"✗ ERROR creating connection pool: {e}")
+        print(f"⚠ WARNING: Could not create connection pool: {e}")
+        print("  Falling back to direct connections (still works, just slower)")
         return None
 
 def get_connection():
-    """Get a connection from the pool"""
+    """Get a connection from the pool (or create direct connection)"""
     global _connection_pool
     
+    if DB_TYPE != 'postgres':
+        raise Exception("get_connection() called but not using PostgreSQL")
+    
+    # If pool doesn't exist, try to initialize it
     if _connection_pool is None:
         init_connection_pool()
     
+    # Try to get connection from pool
+    if _connection_pool is not None:
+        try:
+            return _connection_pool.getconn()
+        except Exception as e:
+            print(f"⚠ Error getting from pool: {e}, using direct connection")
+    
+    # Fallback: Create direct connection (slower but works)
     try:
-        return _connection_pool.getconn()
-    except Exception as e:
-        print(f"Error getting connection from pool: {e}")
-        # Fallback to direct connection
         return psycopg2.connect(DATABASE_URL, sslmode='require')
+    except Exception as e:
+        print(f"✗ Failed to connect to database: {e}")
+        raise
 
 def return_connection(conn):
-    """Return a connection to the pool"""
+    """Return a connection to the pool (or close if no pool)"""
     global _connection_pool
     
-    if _connection_pool is None:
-        conn.close()
-    else:
+    if conn is None:
+        return
+    
+    # If we have a pool, return to it; otherwise just close
+    if _connection_pool is not None:
         try:
             _connection_pool.putconn(conn)
+            return
         except Exception as e:
-            print(f"Error returning connection to pool: {e}")
-            conn.close()
+            print(f"⚠ Error returning to pool: {e}, closing connection")
+    
+    # Fallback: just close the connection
+    try:
+        conn.close()
+    except Exception as e:
+        print(f"⚠ Error closing connection: {e}")
 
 def close_all_connections():
     """Close all connections in the pool (call on shutdown)"""
