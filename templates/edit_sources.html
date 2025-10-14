@@ -425,7 +425,9 @@ block content %}
   function removeSource(button) {
     const sourceItem = button.closest(".source-item");
     const sourcesContainer = document.getElementById("sourcesContainer");
-    const allSources = sourcesContainer.querySelectorAll(".source-item");
+    const allSources = sourcesContainer.querySelectorAll(
+      ".source-item:not(.removing)"
+    );
 
     // Prevent removing if only one source left
     if (allSources.length <= 1) {
@@ -433,16 +435,23 @@ block content %}
       return;
     }
 
-    // Add fade out animation
-    sourceItem.style.animation = "fadeOut 0.3s ease";
+    // Mark as removing and add visual feedback
+    sourceItem.classList.add("removing");
+    sourceItem.style.opacity = "0";
+    sourceItem.style.transform = "scale(0.95)";
+
+    // Reindex immediately (excluding items marked for removal)
+    reindexSources();
+
+    // Actually remove from DOM after animation
     setTimeout(() => {
       sourceItem.remove();
-      reindexSources();
-    }, 300);
+    }, 200);
   }
 
   function reindexSources() {
-    const sources = document.querySelectorAll(".source-item");
+    // Only reindex sources that are not being removed
+    const sources = document.querySelectorAll(".source-item:not(.removing)");
     sources.forEach((source, index) => {
       source.setAttribute("data-index", index);
 
@@ -470,7 +479,16 @@ block content %}
   document
     .getElementById("sourcesForm")
     .addEventListener("submit", function (e) {
+      // Always reindex before submitting to ensure sequential indices
       reindexSources();
+
+      // Validate we have at least one source (excluding ones being removed)
+      const sources = document.querySelectorAll(".source-item:not(.removing)");
+      if (sources.length === 0) {
+        e.preventDefault();
+        alert("You must have at least one capital source!");
+        return false;
+      }
     });
 </script>
 
@@ -499,6 +517,11 @@ block content %}
 
   .source-item {
     transition: all 0.3s ease;
+  }
+
+  .source-item.removing {
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
   }
 
   .form-control:focus,
