@@ -100,6 +100,11 @@
       "month": "2026-12",
       "income": 7500.0,
       "loan_repayment": 255.48
+    },
+    {
+      "month": "2027-01",
+      "income": 8400.0,
+      "loan_repayment": 255.48
     }
   ],
   "expenses_from_savings": [],
