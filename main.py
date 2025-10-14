@@ -403,15 +403,9 @@ def update_sources():
     financial_data['capital']['sources'] = new_sources
     
     print(f"New sources count: {len(financial_data['capital']['sources'])}")
-            
-    # Update exchange rate
-    new_rate = float(request.form['bdt_to_aud_rate'])
-    financial_data['settings']['bdt_to_aud_rate'] = new_rate
     
-    # Update current_rate if target currency is AUD
-    target_currency = financial_data['settings'].get('target_currency', 'AUD')
-    if target_currency == 'AUD':
-        financial_data['settings']['current_rate'] = new_rate
+    # Note: Exchange rate is now managed only on the main sources page
+    # No longer updated from edit sources page
     
     save_user_financial_data(financial_data)
     print("Data saved successfully!")
