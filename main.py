@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, request, redirect, url_for, jsonify, session, flash
+from flask import Flask, render_template, request, redirect, url_for, jsonify, session, flash, make_response
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from collections import defaultdict
 from datetime import datetime
@@ -308,34 +308,34 @@ def dashboard():
 @app.route('/sources')
 def sources_page():
     data = get_all_financial_data()
-    return render_template('sources.html', **data) if data else ("Error", 500)
+    return render_template('sources.html', **data) if data else make_response("Error loading financial data", 500)
 
 @app.route('/capital')
 def capital_page():
     data = get_all_financial_data()
-    return render_template('capital.html', **data) if data else ("Error", 500)
+    return render_template('capital.html', **data) if data else make_response("Error loading financial data", 500)
 
 @app.route('/savings')
 def savings_page():
     data = get_all_financial_data()
-    return render_template('savings.html', **data) if data else ("Error", 500)
+    return render_template('savings.html', **data) if data else make_response("Error loading financial data", 500)
 
 @app.route('/daily_tracker')
 def daily_tracker_page():
     data = get_all_financial_data()
-    return render_template('daily_tracker.html', **data) if data else ("Error", 500)
+    return render_template('daily_tracker.html', **data) if data else make_response("Error loading financial data", 500)
 
 @app.route('/monthly_summary')
 def monthly_summary_page():
     data = get_all_financial_data()
     # Check which months have already been added to savings
     processed_months = {entry['month'] for entry in data.get('monthly_cash_flow', [])}
-    return render_template('monthly_summary.html', processed_months=processed_months, **data) if data else ("Error", 500)
+    return render_template('monthly_summary.html', processed_months=processed_months, **data) if data else make_response("Error loading financial data", 500)
 
 @app.route('/edit_sources', methods=['GET', 'POST'])
 def edit_sources_page():
     data = get_all_financial_data()
-    return render_template('edit_sources.html', **data) if data else ("Error", 500)
+    return render_template('edit_sources.html', **data) if data else make_response("Error loading financial data", 500)
 
 @app.route('/update_sources', methods=['POST'])
 def update_sources():
@@ -576,12 +576,12 @@ def delete_item(list_name, index):
 @app.route('/loan')
 def loan_page():
     data = get_all_financial_data()
-    return render_template('loan_management.html', **data) if data else ("Error", 500)
+    return render_template('loan_management.html', **data) if data else make_response("Error loading financial data", 500)
 
 @app.route('/loan/edit')
 def edit_loan_page():
     data = get_all_financial_data()
-    return render_template('edit_loan.html', **data) if data else ("Error", 500)
+    return render_template('edit_loan.html', **data) if data else make_response("Error loading financial data", 500)
 
 @app.route('/loan/update', methods=['POST'])
 def update_loan():
