@@ -359,6 +359,11 @@ def update_sources():
             })
         index += 1
     
+    # Debug logging
+    print(f"DEBUG: Received {len(new_sources)} sources from form")
+    for i, source in enumerate(new_sources):
+        print(f"  Source {i}: {source['name']} = {source['amount_bdt']} BDT")
+    
     # Update sources in financial data
     financial_data['capital']['sources'] = new_sources
             
@@ -366,7 +371,7 @@ def update_sources():
     financial_data['settings']['bdt_to_aud_rate'] = float(request.form['bdt_to_aud_rate'])
     
     save_user_financial_data(financial_data)
-    flash('Capital sources updated successfully!', 'success')
+    flash(f'Capital sources updated successfully! ({len(new_sources)} sources saved)', 'success')
     return redirect(url_for('sources_page'))
 
 # --- Add Routes ---

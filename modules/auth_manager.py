@@ -1,9 +1,13 @@
 import sqlite3
 import bcrypt
+import os
 from flask_login import UserMixin
 from datetime import datetime
 
 DATABASE_PATH = 'data/users.db'
+
+# Ensure data directory exists with proper permissions
+os.makedirs('data', exist_ok=True)
 
 class User(UserMixin):
     """User model for Flask-Login"""
