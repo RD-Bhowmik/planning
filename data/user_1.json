@@ -7,14 +7,15 @@
     "bdt_to_aud_rate": 0.0126,
     "tax_rate_percent": 0.0,
     "default_loan_repayment": 255.48,
-    "exchange_rate_last_updated": "2025-10-14T23:12:57.730986",
+    "exchange_rate_last_updated": "2025-10-15T02:39:53.649049",
     "exchange_rate_source": "ExchangeRate-API",
-    "target_currency": "AUD",
+    "target_currency": "USD",
     "loan_interest_rate": 8.0,
     "loan_period_months": 60,
     "bdt_to_usd_rate": 0.00821,
     "bdt_to_nzd_rate": 0.0143,
-    "table_sort_order": "newest_first"
+    "table_sort_order": "newest_first",
+    "current_rate": 0.00821
   },
   "capital": {
     "sources": [
