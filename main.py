@@ -40,6 +40,10 @@ def load_user(user_id):
 # Initialize database
 init_db()
 
+# Initialize financial data tables (for PostgreSQL)
+from modules.financial_db import init_financial_tables
+init_financial_tables()
+
 @app.context_processor
 def inject_datetime():
     return {'datetime': datetime}
