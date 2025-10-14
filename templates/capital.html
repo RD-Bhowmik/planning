@@ -2,7 +2,7 @@
 block content %}
 
 <header class="mb-4">
-  <div class="row align-items-center">
+  <div class="row align-items-center mb-3">
     <div class="col-lg-7">
       <h1 class="display-5 mb-2">
         <i class="bi bi-cash-stack text-primary"></i> Capital Management
@@ -119,12 +119,37 @@ block content %}
         class="card-header text-white py-3"
         style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
       >
-        <h4 class="mb-0">
-          <i class="bi bi-receipt-cutoff"></i> Expenses from Capital
-          <span class="badge bg-white text-primary ms-2"
-            >{{ capital.expenses_from_capital|length }} expenses</span
+        <div class="d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">
+            <i class="bi bi-receipt-cutoff"></i> Expenses from Capital
+            <span class="badge bg-white text-primary ms-2"
+              >{{ capital.expenses_from_capital|length }} expenses</span
+            >
+          </h4>
+          <form
+            action="{{ url_for('update_sort_order') }}"
+            method="post"
+            class="d-inline"
           >
-        </h4>
+            <div class="btn-group btn-group-sm" role="group">
+              <input type="radio" class="btn-check" name="sort_order"
+              id="capital_newest_first" value="newest_first" {% if
+              settings.get('table_sort_order', 'newest_first') == 'newest_first'
+              %}checked{% endif %} onchange="this.form.submit()">
+              <label class="btn btn-outline-light" for="capital_newest_first">
+                <i class="bi bi-arrow-down-circle"></i> Newest First
+              </label>
+
+              <input type="radio" class="btn-check" name="sort_order"
+              id="capital_oldest_first" value="oldest_first" {% if
+              settings.get('table_sort_order') == 'oldest_first' %}checked{%
+              endif %} onchange="this.form.submit()">
+              <label class="btn btn-outline-light" for="capital_oldest_first">
+                <i class="bi bi-arrow-up-circle"></i> Oldest First
+              </label>
+            </div>
+          </form>
+        </div>
       </div>
       <div class="card-body p-0">
         <div
@@ -150,7 +175,10 @@ block content %}
               </tr>
             </thead>
             <tbody>
-              {% for expense in capital.expenses_from_capital %}
+              {% set sorted_expenses = capital.expenses_from_capital|reverse if
+              settings.get('table_sort_order', 'newest_first') == 'newest_first'
+              else capital.expenses_from_capital %} {% for expense in
+              sorted_expenses %}
               <tr>
                 <td class="py-3 px-4 fw-semibold">{{ expense.name }}</td>
                 <td class="py-3 px-4 text-end text-danger fw-semibold">

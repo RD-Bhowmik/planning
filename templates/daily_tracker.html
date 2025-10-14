@@ -1,13 +1,15 @@
 {% extends "base.html" %} {% block title %}Daily Income Tracker{% endblock %} {%
 block content %}
 
-<header class="mb-5">
-  <h1 class="display-4 mb-2">
-    <i class="bi bi-calendar-day text-primary"></i> Daily Income Tracker
-  </h1>
-  <p class="lead text-muted mb-0">
-    Log your daily work hours and income. Track earnings after tax deduction.
-  </p>
+<header class="mb-4">
+  <div class="mb-3">
+    <h1 class="display-4 mb-2">
+      <i class="bi bi-calendar-day text-primary"></i> Daily Income Tracker
+    </h1>
+    <p class="lead text-muted mb-0">
+      Log your daily work hours and income. Track earnings after tax deduction.
+    </p>
+  </div>
 </header>
 
 <!-- Summary Cards -->
@@ -107,12 +109,37 @@ block content %}
         class="card-header text-white py-3"
         style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
       >
-        <h4 class="mb-0">
-          <i class="bi bi-journal-text"></i> Income Log
-          <span class="badge bg-white text-primary ms-2"
-            >{{ daily_income_tracker|length }} entries</span
+        <div class="d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">
+            <i class="bi bi-journal-text"></i> Income Log
+            <span class="badge bg-white text-primary ms-2"
+              >{{ daily_income_tracker|length }} entries</span
+            >
+          </h4>
+          <form
+            action="{{ url_for('update_sort_order') }}"
+            method="post"
+            class="d-inline"
           >
-        </h4>
+            <div class="btn-group btn-group-sm" role="group">
+              <input type="radio" class="btn-check" name="sort_order"
+              id="daily_newest_first" value="newest_first" {% if
+              settings.get('table_sort_order', 'newest_first') == 'newest_first'
+              %}checked{% endif %} onchange="this.form.submit()">
+              <label class="btn btn-outline-light" for="daily_newest_first">
+                <i class="bi bi-arrow-down-circle"></i> Newest First
+              </label>
+
+              <input type="radio" class="btn-check" name="sort_order"
+              id="daily_oldest_first" value="oldest_first" {% if
+              settings.get('table_sort_order') == 'oldest_first' %}checked{%
+              endif %} onchange="this.form.submit()">
+              <label class="btn btn-outline-light" for="daily_oldest_first">
+                <i class="bi bi-arrow-up-circle"></i> Oldest First
+              </label>
+            </div>
+          </form>
+        </div>
       </div>
       <div class="card-body p-0">
         <div
@@ -144,7 +171,9 @@ block content %}
               </tr>
             </thead>
             <tbody>
-              {% for entry in daily_income_tracker %}
+              {% set sorted_entries = daily_income_tracker|reverse if
+              settings.get('table_sort_order', 'newest_first') == 'newest_first'
+              else daily_income_tracker %} {% for entry in sorted_entries %}
               <tr>
                 <td class="py-3 px-4 fw-semibold">
                   {{ datetime.strptime(entry.date, '%Y-%m-%d').strftime('%B %d,

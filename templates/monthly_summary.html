@@ -1,17 +1,60 @@
 {% extends "base.html" %} {% block title %}Monthly Income Summary{% endblock %}
 {% block content %}
 
-<header class="mb-5">
-  <h1 class="display-4 mb-2">
-    <i class="bi bi-bar-chart-line text-primary"></i> Monthly Income Summary
-  </h1>
-  <p class="lead text-muted mb-0">
-    Review your daily income grouped by month and transfer to savings with one
-    click.
-  </p>
+<header class="mb-4">
+  <div class="mb-3">
+    <h1 class="display-4 mb-2">
+      <i class="bi bi-bar-chart-line text-primary"></i> Monthly Income Summary
+    </h1>
+    <p class="lead text-muted mb-0">
+      Review your daily income grouped by month and transfer to savings with one
+      click.
+    </p>
+  </div>
 </header>
 
 {% if daily_income_by_month %}
+<!-- Sort Order Control -->
+<div
+  class="card shadow-sm border-0 mb-4"
+  style="background: rgba(102, 126, 234, 0.05)"
+>
+  <div class="card-body p-3">
+    <form
+      action="{{ url_for('update_sort_order') }}"
+      method="post"
+      class="d-flex align-items-center justify-content-between"
+    >
+      <div class="d-flex align-items-center">
+        <i class="bi bi-sort-down fs-5 me-3 text-primary"></i>
+        <div>
+          <h6 class="mb-0 fw-semibold">Sort Order</h6>
+          <small class="text-muted"
+            >Controls both month order and entries within months</small
+          >
+        </div>
+      </div>
+      <div class="btn-group btn-group-sm" role="group">
+        <input type="radio" class="btn-check" name="sort_order"
+        id="monthly_newest_first" value="newest_first" {% if
+        settings.get('table_sort_order', 'newest_first') == 'newest_first'
+        %}checked{% endif %} onchange="this.form.submit()">
+        <label class="btn btn-outline-primary" for="monthly_newest_first">
+          <i class="bi bi-arrow-down-circle"></i> Newest First
+        </label>
+
+        <input type="radio" class="btn-check" name="sort_order"
+        id="monthly_oldest_first" value="oldest_first" {% if
+        settings.get('table_sort_order') == 'oldest_first' %}checked{% endif %}
+        onchange="this.form.submit()">
+        <label class="btn btn-outline-primary" for="monthly_oldest_first">
+          <i class="bi bi-arrow-up-circle"></i> Oldest First
+        </label>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- Month Cards -->
 <div class="row g-4">
   {% for month_key, data in daily_income_by_month %}
@@ -92,8 +135,10 @@
               </tr>
             </thead>
             <tbody>
-              {% for entry in data.entries %} {% set net =
-              calculate_net_income(entry.gross_income,
+              {% set sorted_entries = data.entries|reverse if
+              settings.get('table_sort_order', 'newest_first') == 'newest_first'
+              else data.entries %} {% for entry in sorted_entries %} {% set net
+              = calculate_net_income(entry.gross_income,
               settings.tax_rate_percent) %} {% set tax = entry.gross_income -
               net %}
               <tr>

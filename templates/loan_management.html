@@ -1,18 +1,20 @@
 {% extends "base.html" %} {% block title %}Loan Management{% endblock %} {%
 block content %}
 
-<header class="d-flex justify-content-between align-items-center mb-4">
-  <div>
-    <h1 class="display-5 mb-2">
-      <i class="bi bi-bank2 text-primary"></i> Loan Management
-    </h1>
-    <p class="lead text-muted mb-0">
-      Track your loan amount and repayments with ease.
-    </p>
+<header class="mb-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h1 class="display-5 mb-2">
+        <i class="bi bi-bank2 text-primary"></i> Loan Management
+      </h1>
+      <p class="lead text-muted mb-0">
+        Track your loan amount and repayments with ease.
+      </p>
+    </div>
+    <a href="{{ url_for('edit_loan_page') }}" class="btn btn-primary btn-lg">
+      <i class="bi bi-pencil-square"></i> Edit Loan Details
+    </a>
   </div>
-  <a href="{{ url_for('edit_loan_page') }}" class="btn btn-primary btn-lg">
-    <i class="bi bi-pencil-square"></i> Edit Loan Details
-  </a>
 </header>
 
 <!-- Main 2-Column Layout -->
@@ -196,9 +198,34 @@ block content %}
         class="card-header text-white py-3"
         style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%)"
       >
-        <h4 class="mb-0">
-          <i class="bi bi-clock-history"></i> Payment History
-        </h4>
+        <div class="d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">
+            <i class="bi bi-clock-history"></i> Payment History
+          </h4>
+          <form
+            action="{{ url_for('update_sort_order') }}"
+            method="post"
+            class="d-inline"
+          >
+            <div class="btn-group btn-group-sm" role="group">
+              <input type="radio" class="btn-check" name="sort_order"
+              id="loan_newest_first" value="newest_first" {% if
+              settings.get('table_sort_order', 'newest_first') == 'newest_first'
+              %}checked{% endif %} onchange="this.form.submit()">
+              <label class="btn btn-outline-light" for="loan_newest_first">
+                <i class="bi bi-arrow-down-circle"></i> Newest First
+              </label>
+
+              <input type="radio" class="btn-check" name="sort_order"
+              id="loan_oldest_first" value="oldest_first" {% if
+              settings.get('table_sort_order') == 'oldest_first' %}checked{%
+              endif %} onchange="this.form.submit()">
+              <label class="btn btn-outline-light" for="loan_oldest_first">
+                <i class="bi bi-arrow-up-circle"></i> Oldest First
+              </label>
+            </div>
+          </form>
+        </div>
       </div>
       <div class="card-body p-0">
         {% if monthly_cash_flow %}
@@ -228,7 +255,9 @@ block content %}
               </tr>
             </thead>
             <tbody>
-              {% for entry in monthly_cash_flow %}
+              {% set sorted_entries = monthly_cash_flow|reverse if
+              settings.get('table_sort_order', 'newest_first') == 'newest_first'
+              else monthly_cash_flow %} {% for entry in sorted_entries %}
               <tr class="align-middle">
                 <td class="py-3 px-4 fw-semibold">{{ entry.month }}</td>
                 <td class="py-3 px-4 text-end text-success fw-semibold">

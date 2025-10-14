@@ -1,20 +1,91 @@
 {% extends "base.html" %} {% block title %}Capital Sources{% endblock %} {%
 block content %}
-<header class="d-flex justify-content-between align-items-center mb-5">
-  <div>
-    <h1 class="display-5 mb-2">
-      <i class="bi bi-wallet2 text-primary"></i> Capital Sources
-    </h1>
-    <p class="lead text-muted mb-0">
-      Your initial funding in BDT and converted to AUD
-    </p>
+<header class="mb-4">
+  <div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+      <h1 class="display-5 mb-2">
+        <i class="bi bi-wallet2 text-primary"></i> Capital Sources
+      </h1>
+      <p class="lead text-muted mb-0">
+        Your initial funding in BDT and converted to {{
+        settings.get('target_currency', 'AUD') }}
+      </p>
+    </div>
+    <a
+      href="{{ url_for('edit_sources_page') }}"
+      class="btn btn-primary btn-lg shadow"
+    >
+      <i class="bi bi-pencil-square"></i> Edit Sources & Rate
+    </a>
   </div>
-  <a
-    href="{{ url_for('edit_sources_page') }}"
-    class="btn btn-primary btn-lg shadow"
+
+  <!-- Country Selector -->
+  <div
+    class="card shadow-sm border-0 mb-4"
+    style="
+      background: linear-gradient(
+        135deg,
+        rgba(102, 126, 234, 0.05) 0%,
+        rgba(118, 75, 162, 0.05) 100%
+      );
+    "
   >
-    <i class="bi bi-pencil-square"></i> Edit Sources & Rate
-  </a>
+    <div class="card-body p-4">
+      <div class="row align-items-center">
+        <div class="col-md-3">
+          <h6 class="mb-2 fw-bold">
+            <i class="bi bi-globe-americas"></i> Select Your Country
+          </h6>
+          <p class="small text-muted mb-0">
+            Currency will be automatically set
+          </p>
+        </div>
+        <div class="col-md-9">
+          <div class="row g-3">
+            <div class="col-md-8">
+              <select class="form-select form-select-lg" id="countrySelector">
+                <optgroup label="Popular Destinations">
+                  <option value="AUD" {% if settings.get('target_currency', 'AUD') == 'AUD' %}selected{% endif %}>🇦🇺 Australia (AUD)</option>
+                  <option value="USD" {% if settings.get('target_currency') == 'USD' %}selected{% endif %}>🇺🇸 United States (USD)</option>
+                  <option value="NZD" {% if settings.get('target_currency') == 'NZD' %}selected{% endif %}>🇳🇿 New Zealand (NZD)</option>
+                  <option value="GBP" {% if settings.get('target_currency') == 'GBP' %}selected{% endif %}>🇬🇧 United Kingdom (GBP)</option>
+                  <option value="CAD" {% if settings.get('target_currency') == 'CAD' %}selected{% endif %}>🇨🇦 Canada (CAD)</option>
+                  <option value="EUR" {% if settings.get('target_currency') == 'EUR' %}selected{% endif %}>🇪🇺 European Union (EUR)</option>
+                </optgroup>
+                <optgroup label="Asia Pacific">
+                  <option value="SGD" {% if settings.get('target_currency') == 'SGD' %}selected{% endif %}>🇸🇬 Singapore (SGD)</option>
+                  <option value="MYR" {% if settings.get('target_currency') == 'MYR' %}selected{% endif %}>🇲🇾 Malaysia (MYR)</option>
+                  <option value="JPY" {% if settings.get('target_currency') == 'JPY' %}selected{% endif %}>🇯🇵 Japan (JPY)</option>
+                  <option value="KRW" {% if settings.get('target_currency') == 'KRW' %}selected{% endif %}>🇰🇷 South Korea (KRW)</option>
+                  <option value="CNY" {% if settings.get('target_currency') == 'CNY' %}selected{% endif %}>🇨🇳 China (CNY)</option>
+                  <option value="INR" {% if settings.get('target_currency') == 'INR' %}selected{% endif %}>🇮🇳 India (INR)</option>
+                  <option value="THB" {% if settings.get('target_currency') == 'THB' %}selected{% endif %}>🇹🇭 Thailand (THB)</option>
+                </optgroup>
+                <optgroup label="Europe">
+                  <option value="CHF" {% if settings.get('target_currency') == 'CHF' %}selected{% endif %}>🇨🇭 Switzerland (CHF)</option>
+                  <option value="SEK" {% if settings.get('target_currency') == 'SEK' %}selected{% endif %}>🇸🇪 Sweden (SEK)</option>
+                  <option value="NOK" {% if settings.get('target_currency') == 'NOK' %}selected{% endif %}>🇳🇴 Norway (NOK)</option>
+                  <option value="DKK" {% if settings.get('target_currency') == 'DKK' %}selected{% endif %}>🇩🇰 Denmark (DKK)</option>
+                </optgroup>
+                <optgroup label="Middle East">
+                  <option value="AED" {% if settings.get('target_currency') == 'AED' %}selected{% endif %}>🇦🇪 UAE (AED)</option>
+                  <option value="SAR" {% if settings.get('target_currency') == 'SAR' %}selected{% endif %}>🇸🇦 Saudi Arabia (SAR)</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <div class="alert alert-info mb-0 p-3 h-100 d-flex align-items-center">
+                <div>
+                  <strong class="d-block">Current:</strong>
+                  <span class="fs-5 fw-bold">{{ settings.get('target_currency', 'AUD') }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </header>
 
 <div class="row g-4 mb-5">
@@ -40,7 +111,9 @@ block content %}
           >
             {{ "%.2f"|format(source.amount_aud) }}
           </p>
-          <span class="fs-5 text-muted fw-semibold">AUD</span>
+          <span class="fs-5 text-muted fw-semibold"
+            >{{ settings.get('target_currency', 'AUD') }}</span
+          >
         </div>
         <div class="p-3 rounded" style="background: rgba(102, 126, 234, 0.05)">
           <p class="h5 text-muted mb-0">
@@ -86,7 +159,8 @@ block content %}
             -webkit-text-fill-color: transparent;
           "
         >
-          {{ "%.2f"|format(capital.total_capital_aud) }} AUD
+          {{ "%.2f"|format(capital.total_capital_aud) }} {{
+          settings.get('target_currency', 'AUD') }}
         </p>
         <p class="h4 text-muted mb-4">
           {{ "{:,.0f}".format(capital.sources|sum(attribute='amount_bdt')) }}
@@ -97,8 +171,8 @@ block content %}
         >
           <i class="bi bi-info-circle-fill text-primary"></i>
           <small class="fw-semibold"
-            >Calculated at rate: 1 BDT = {{ settings.bdt_to_aud_rate }}
-            AUD</small
+            >Calculated at rate: 1 BDT = {{ settings.current_rate }} {{
+            settings.get('target_currency', 'AUD') }}</small
           >
         </div>
       </div>
@@ -140,7 +214,8 @@ block content %}
               -webkit-text-fill-color: transparent;
             "
           >
-            {{ settings.bdt_to_aud_rate }} AUD
+            {{ settings.current_rate }} {{ settings.get('target_currency',
+            'AUD') }}
           </p>
         </div>
 
@@ -158,7 +233,7 @@ block content %}
                 >{{ settings.get('exchange_rate_source', 'ExchangeRate-API')
                 }}</span
               >
-              {% else %} Click below to fetch the latest rate {% endif %}
+              {% else %} Click below to fetch the latest rates {% endif %}
             </small>
           </div>
         </div>
@@ -181,6 +256,46 @@ block content %}
 </div>
 
 <script>
+  // Country selector handler
+  const countrySelector = document.getElementById('countrySelector');
+  
+  countrySelector.addEventListener('change', async function() {
+    const currency = this.value;
+    
+    // Show loading state
+    this.disabled = true;
+    this.style.opacity = '0.6';
+    
+    try {
+      const response = await fetch(`/set_currency/${currency}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        // Show success message
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert alert-success mt-2';
+        alertDiv.innerHTML = `<i class="bi bi-check-circle-fill me-2"></i>Currency changed to ${currency}! Refreshing...`;
+        countrySelector.parentElement.appendChild(alertDiv);
+        
+        // Reload page after short delay
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
+      }
+    } catch (error) {
+      console.error('Error changing currency:', error);
+      alert('Failed to change currency. Please try again.');
+      this.disabled = false;
+      this.style.opacity = '1';
+    }
+  });
+
   async function fetchExchangeRate() {
     const fetchBtn = document.getElementById("fetchRateBtn");
     const rateDisplay = document.getElementById("current-rate-display");
@@ -206,18 +321,20 @@ block content %}
       if (data.success) {
         // Update the rate display with animation
         rateDisplay.style.transform = "scale(1.1)";
-        rateDisplay.textContent = data.rate + " AUD";
+        rateDisplay.textContent =
+          data.current_rate + " " + data.current_currency;
         setTimeout(() => {
           rateDisplay.style.transform = "scale(1)";
         }, 300);
 
-        // Show success message
+        // Show success message with all rates
+        const ratesInfo = `AUD: ${data.rates.AUD}, USD: ${data.rates.USD}, NZD: ${data.rates.NZD}`;
         messageDiv.innerHTML = `
           <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
             <div class="d-flex align-items-center">
               <i class="bi bi-check-circle-fill fs-4 me-3"></i>
               <div>
-                <strong>Success!</strong> Exchange rate updated. Refreshing page...
+                <strong>Success!</strong> All exchange rates updated (${ratesInfo}). Refreshing page...
               </div>
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>

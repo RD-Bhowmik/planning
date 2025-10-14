@@ -1,14 +1,16 @@
 {% extends "base.html" %} {% block title %}Savings Management{% endblock %} {%
 block content %}
 
-<header class="d-flex justify-content-between align-items-center mb-4">
-  <div>
-    <h1 class="display-4 mb-2">
-      <i class="bi bi-piggy-bank-fill text-primary"></i> Savings Management
-    </h1>
-    <p class="lead text-muted mb-0">
-      Track your monthly income, savings, and related expenses.
-    </p>
+<header class="mb-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h1 class="display-4 mb-2">
+        <i class="bi bi-piggy-bank-fill text-primary"></i> Savings Management
+      </h1>
+      <p class="lead text-muted mb-0">
+        Track your monthly income, savings, and related expenses.
+      </p>
+    </div>
   </div>
 </header>
 
@@ -119,12 +121,43 @@ block content %}
         class="card-header text-white py-3"
         style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
       >
-        <h4 class="mb-0">
-          <i class="bi bi-calendar-check"></i> Monthly Cash Flow
-          <span class="badge bg-white text-primary ms-2"
-            >{{ monthly_cash_flow|length }} entries</span
+        <div class="d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">
+            <i class="bi bi-calendar-check"></i> Monthly Cash Flow
+            <span class="badge bg-white text-primary ms-2"
+              >{{ monthly_cash_flow|length }} entries</span
+            >
+          </h4>
+          <form
+            action="{{ url_for('update_sort_order') }}"
+            method="post"
+            class="d-inline"
           >
-        </h4>
+            <div class="btn-group btn-group-sm" role="group">
+              <input type="radio" class="btn-check" name="sort_order"
+              id="savings_cf_newest_first" value="newest_first" {% if
+              settings.get('table_sort_order', 'newest_first') == 'newest_first'
+              %}checked{% endif %} onchange="this.form.submit()">
+              <label
+                class="btn btn-outline-light"
+                for="savings_cf_newest_first"
+              >
+                <i class="bi bi-arrow-down-circle"></i> Newest First
+              </label>
+
+              <input type="radio" class="btn-check" name="sort_order"
+              id="savings_cf_oldest_first" value="oldest_first" {% if
+              settings.get('table_sort_order') == 'oldest_first' %}checked{%
+              endif %} onchange="this.form.submit()">
+              <label
+                class="btn btn-outline-light"
+                for="savings_cf_oldest_first"
+              >
+                <i class="bi bi-arrow-up-circle"></i> Oldest First
+              </label>
+            </div>
+          </form>
+        </div>
       </div>
       <div class="card-body p-0">
         <div
@@ -156,7 +189,9 @@ block content %}
               </tr>
             </thead>
             <tbody>
-              {% for entry in monthly_cash_flow %}
+              {% set sorted_entries = monthly_cash_flow|reverse if
+              settings.get('table_sort_order', 'newest_first') == 'newest_first'
+              else monthly_cash_flow %} {% for entry in sorted_entries %}
               <tr>
                 <td class="py-3 px-4 fw-semibold">
                   {{ datetime.strptime(entry.month, '%Y-%m').strftime('%B %Y')
@@ -231,12 +266,43 @@ block content %}
         class="card-header text-white py-3"
         style="background: linear-gradient(135deg, #f85032 0%, #e73827 100%)"
       >
-        <h4 class="mb-0">
-          <i class="bi bi-receipt"></i> Expenses From Savings
-          <span class="badge bg-white text-danger ms-2"
-            >{{ expenses_from_savings|length }} expenses</span
+        <div class="d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">
+            <i class="bi bi-receipt"></i> Expenses From Savings
+            <span class="badge bg-white text-danger ms-2"
+              >{{ expenses_from_savings|length }} expenses</span
+            >
+          </h4>
+          <form
+            action="{{ url_for('update_sort_order') }}"
+            method="post"
+            class="d-inline"
           >
-        </h4>
+            <div class="btn-group btn-group-sm" role="group">
+              <input type="radio" class="btn-check" name="sort_order"
+              id="savings_exp_newest_first" value="newest_first" {% if
+              settings.get('table_sort_order', 'newest_first') == 'newest_first'
+              %}checked{% endif %} onchange="this.form.submit()">
+              <label
+                class="btn btn-outline-light"
+                for="savings_exp_newest_first"
+              >
+                <i class="bi bi-arrow-down-circle"></i> Newest First
+              </label>
+
+              <input type="radio" class="btn-check" name="sort_order"
+              id="savings_exp_oldest_first" value="oldest_first" {% if
+              settings.get('table_sort_order') == 'oldest_first' %}checked{%
+              endif %} onchange="this.form.submit()">
+              <label
+                class="btn btn-outline-light"
+                for="savings_exp_oldest_first"
+              >
+                <i class="bi bi-arrow-up-circle"></i> Oldest First
+              </label>
+            </div>
+          </form>
+        </div>
       </div>
       <div class="card-body p-0">
         <div
@@ -264,7 +330,9 @@ block content %}
               </tr>
             </thead>
             <tbody>
-              {% for expense in expenses_from_savings %}
+              {% set sorted_expenses = expenses_from_savings|reverse if
+              settings.get('table_sort_order', 'newest_first') == 'newest_first'
+              else expenses_from_savings %} {% for expense in sorted_expenses %}
               <tr>
                 <td class="py-3 px-4">{{ expense.name }}</td>
                 <td class="py-3 px-4 text-end fw-semibold text-danger">

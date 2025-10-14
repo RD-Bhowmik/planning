@@ -14,100 +14,134 @@ block content %}
   <div class="col-lg-10">
     <div class="card shadow-lg border-0">
       <div class="card-body p-5">
-        <form action="{{ url_for('update_sources') }}" method="post">
+        <form
+          action="{{ url_for('update_sources') }}"
+          method="post"
+          id="sourcesForm"
+        >
           <fieldset class="mb-5">
-            <legend class="h4 fw-bold mb-4">
-              <i class="bi bi-wallet2 text-primary"></i> Source Amounts (BDT)
-            </legend>
-            {% set icons = ['heart-fill', 'people-fill', 'bank'] %} {% set
-            colors = ['#667eea', '#0ba360', '#f093fb'] %} {% for source in
-            capital.sources %}
-            <div
-              class="mb-4 p-4 rounded"
-              style="background: rgba({{ 
-              '102, 126, 234' if loop.index0 == 0 else 
-              '11, 163, 96' if loop.index0 == 1 else 
-              '240, 147, 251' 
-            }}, 0.05); border-left: 4px solid {{ colors[loop.index0 % 3] }};"
-            >
-              <input
-                type="hidden"
-                name="source_index_{{ loop.index0 }}"
-                value="{{ loop.index0 }}"
-              />
-
-              <div class="mb-3">
-                <label
-                  for="source_name_{{ loop.index0 }}"
-                  class="form-label fw-semibold"
-                >
-                  <i
-                    class="bi bi-{{ icons[loop.index0 % 3] }}"
-                    style="color: {{ colors[loop.index0 % 3] }};"
-                  ></i>
-                  Source Name
-                </label>
-                <div class="input-group input-group-lg">
-                  <span class="input-group-text bg-light">
-                    <i class="bi bi-tag"></i>
-                  </span>
-                  <input
-                    type="text"
-                    class="form-control form-control-lg"
-                    id="source_name_{{ loop.index0 }}"
-                    name="source_name_{{ loop.index0 }}"
-                    value="{{ source.name }}"
-                    placeholder="e.g., Parents, Friend, Loan"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div class="mb-2">
-                <label
-                  for="source_amount_{{ loop.index0 }}"
-                  class="form-label fw-semibold"
-                >
-                  <i
-                    class="bi bi-coin"
-                    style="color: {{ colors[loop.index0 % 3] }};"
-                  ></i>
-                  Amount (BDT)
-                </label>
-                <div class="input-group input-group-lg">
-                  <span class="input-group-text bg-light">
-                    <i class="bi bi-cash-coin"></i>
-                  </span>
-                  <input
-                    type="number"
-                    step="1"
-                    class="form-control form-control-lg"
-                    id="source_amount_{{ loop.index0 }}"
-                    name="source_amount_{{ loop.index0 }}"
-                    value="{{ source.amount_bdt }}"
-                    required
-                  />
-                  <span class="input-group-text bg-light fw-semibold">BDT</span>
-                </div>
-              </div>
-
-              <div
-                class="alert alert-light border-0 mt-2 mb-0"
-                style="background: white"
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <legend class="h4 fw-bold mb-0">
+                <i class="bi bi-wallet2 text-primary"></i> Source Amounts (BDT)
+              </legend>
+              <button
+                type="button"
+                class="btn btn-success shadow"
+                onclick="addNewSource()"
               >
-                <i class="bi bi-calculator"></i>
-                <small>
-                  Current: {{ "{:,.0f}".format(source.amount_bdt) }} BDT =
-                  <span
-                    class="fw-bold"
-                    style="color: {{ colors[loop.index0 % 3] }};"
-                  >
-                    {{ "%.2f"|format(source.amount_aud) }} AUD
-                  </span>
-                </small>
-              </div>
+                <i class="bi bi-plus-circle me-2"></i> Add New Source
+              </button>
             </div>
-            {% endfor %}
+
+            <div id="sourcesContainer">
+              {% set icons = ['heart-fill', 'people-fill', 'bank',
+              'briefcase-fill', 'gift-fill', 'wallet2'] %} {% set colors =
+              ['#667eea', '#0ba360', '#f093fb', '#4facfe', '#f6d365', '#fa709a']
+              %} {% for source in capital.sources %}
+              <div
+                class="source-item mb-4 p-4 rounded"
+                style="background: rgba({{ 
+                  '102, 126, 234' if loop.index0 % 6 == 0 else 
+                  '11, 163, 96' if loop.index0 % 6 == 1 else 
+                  '240, 147, 251' if loop.index0 % 6 == 2 else
+                  '79, 172, 254' if loop.index0 % 6 == 3 else
+                  '246, 211, 101' if loop.index0 % 6 == 4 else
+                  '250, 112, 154'
+                }}, 0.05); border-left: 4px solid {{ colors[loop.index0 % 6] }}; position: relative;"
+                data-index="{{ loop.index0 }}"
+              >
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm position-absolute"
+                  style="
+                    top: 10px;
+                    right: 10px;
+                    border-radius: 50%;
+                    width: 35px;
+                    height: 35px;
+                    padding: 0;
+                  "
+                  onclick="removeSource(this)"
+                  title="Remove this source"
+                >
+                  <i class="bi bi-x-lg"></i>
+                </button>
+
+                <div class="mb-3">
+                  <label
+                    for="source_name_{{ loop.index0 }}"
+                    class="form-label fw-semibold"
+                  >
+                    <i
+                      class="bi bi-{{ icons[loop.index0 % 6] }}"
+                      style="color: {{ colors[loop.index0 % 6] }};"
+                    ></i>
+                    Source Name
+                  </label>
+                  <div class="input-group input-group-lg">
+                    <span class="input-group-text bg-light">
+                      <i class="bi bi-tag"></i>
+                    </span>
+                    <input
+                      type="text"
+                      class="form-control form-control-lg source-name"
+                      id="source_name_{{ loop.index0 }}"
+                      name="source_name_{{ loop.index0 }}"
+                      value="{{ source.name }}"
+                      placeholder="e.g., Parents, Friend, Loan, Jethu"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="mb-2">
+                  <label
+                    for="source_amount_{{ loop.index0 }}"
+                    class="form-label fw-semibold"
+                  >
+                    <i
+                      class="bi bi-coin"
+                      style="color: {{ colors[loop.index0 % 6] }};"
+                    ></i>
+                    Amount (BDT)
+                  </label>
+                  <div class="input-group input-group-lg">
+                    <span class="input-group-text bg-light">
+                      <i class="bi bi-cash-coin"></i>
+                    </span>
+                    <input
+                      type="number"
+                      step="1"
+                      class="form-control form-control-lg source-amount"
+                      id="source_amount_{{ loop.index0 }}"
+                      name="source_amount_{{ loop.index0 }}"
+                      value="{{ source.amount_bdt }}"
+                      required
+                    />
+                    <span class="input-group-text bg-light fw-semibold"
+                      >BDT</span
+                    >
+                  </div>
+                </div>
+
+                <div
+                  class="alert alert-light border-0 mt-2 mb-0"
+                  style="background: white"
+                >
+                  <i class="bi bi-calculator"></i>
+                  <small>
+                    Current: {{ "{:,.0f}".format(source.amount_bdt) }} BDT =
+                    <span
+                      class="fw-bold"
+                      style="color: {{ colors[loop.index0 % 6] }};"
+                    >
+                      {{ "%.2f"|format(source.amount_aud) }} AUD
+                    </span>
+                  </small>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
           </fieldset>
 
           <fieldset class="mb-5">
@@ -284,6 +318,160 @@ block content %}
   // Add smooth transition to rate input
   document.getElementById("bdt_to_aud_rate").style.transition =
     "transform 0.3s ease";
+
+  // Dynamic source management
+  const colors = [
+    "#667eea",
+    "#0ba360",
+    "#f093fb",
+    "#4facfe",
+    "#f6d365",
+    "#fa709a",
+  ];
+  const rgbaColors = [
+    "rgba(102, 126, 234, 0.05)",
+    "rgba(11, 163, 96, 0.05)",
+    "rgba(240, 147, 251, 0.05)",
+    "rgba(79, 172, 254, 0.05)",
+    "rgba(246, 211, 101, 0.05)",
+    "rgba(250, 112, 154, 0.05)",
+  ];
+  const icons = [
+    "heart-fill",
+    "people-fill",
+    "bank",
+    "briefcase-fill",
+    "gift-fill",
+    "wallet2",
+  ];
+
+  function getNextIndex() {
+    const sources = document.querySelectorAll(".source-item");
+    return sources.length;
+  }
+
+  function addNewSource() {
+    const container = document.getElementById("sourcesContainer");
+    const index = getNextIndex();
+    const colorIndex = index % 6;
+
+    const sourceHtml = `
+      <div class="source-item mb-4 p-4 rounded" 
+           style="background: ${rgbaColors[colorIndex]}; border-left: 4px solid ${colors[colorIndex]}; position: relative; animation: slideInUp 0.5s ease;"
+           data-index="${index}">
+        <button type="button" 
+                class="btn btn-danger btn-sm position-absolute" 
+                style="top: 10px; right: 10px; border-radius: 50%; width: 35px; height: 35px; padding: 0;"
+                onclick="removeSource(this)"
+                title="Remove this source">
+          <i class="bi bi-x-lg"></i>
+        </button>
+
+        <div class="mb-3">
+          <label for="source_name_${index}" class="form-label fw-semibold">
+            <i class="bi bi-${icons[colorIndex]}" style="color: ${colors[colorIndex]};"></i>
+            Source Name
+          </label>
+          <div class="input-group input-group-lg">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-tag"></i>
+            </span>
+            <input type="text" 
+                   class="form-control form-control-lg source-name" 
+                   id="source_name_${index}" 
+                   name="source_name_${index}" 
+                   placeholder="e.g., Parents, Friend, Loan, Jethu" 
+                   required />
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <label for="source_amount_${index}" class="form-label fw-semibold">
+            <i class="bi bi-coin" style="color: ${colors[colorIndex]};"></i>
+            Amount (BDT)
+          </label>
+          <div class="input-group input-group-lg">
+            <span class="input-group-text bg-light">
+              <i class="bi bi-cash-coin"></i>
+            </span>
+            <input type="number" 
+                   step="1" 
+                   class="form-control form-control-lg source-amount" 
+                   id="source_amount_${index}" 
+                   name="source_amount_${index}" 
+                   value="0" 
+                   required />
+            <span class="input-group-text bg-light fw-semibold">BDT</span>
+          </div>
+        </div>
+
+        <div class="alert alert-light border-0 mt-2 mb-0" style="background: white">
+          <i class="bi bi-info-circle"></i>
+          <small>New source - enter amount and save changes</small>
+        </div>
+      </div>
+    `;
+
+    container.insertAdjacentHTML("beforeend", sourceHtml);
+
+    // Scroll to the new source
+    setTimeout(() => {
+      const newSource = container.lastElementChild;
+      newSource.scrollIntoView({ behavior: "smooth", block: "center" });
+      newSource.querySelector(".source-name").focus();
+    }, 100);
+  }
+
+  function removeSource(button) {
+    const sourceItem = button.closest(".source-item");
+    const sourcesContainer = document.getElementById("sourcesContainer");
+    const allSources = sourcesContainer.querySelectorAll(".source-item");
+
+    // Prevent removing if only one source left
+    if (allSources.length <= 1) {
+      alert("You must have at least one capital source!");
+      return;
+    }
+
+    // Add fade out animation
+    sourceItem.style.animation = "fadeOut 0.3s ease";
+    setTimeout(() => {
+      sourceItem.remove();
+      reindexSources();
+    }, 300);
+  }
+
+  function reindexSources() {
+    const sources = document.querySelectorAll(".source-item");
+    sources.forEach((source, index) => {
+      source.setAttribute("data-index", index);
+
+      // Update name field
+      const nameInput = source.querySelector(".source-name");
+      nameInput.id = `source_name_${index}`;
+      nameInput.name = `source_name_${index}`;
+
+      // Update amount field
+      const amountInput = source.querySelector(".source-amount");
+      amountInput.id = `source_amount_${index}`;
+      amountInput.name = `source_amount_${index}`;
+
+      // Update labels
+      const nameLabel = source.querySelector('label[for^="source_name"]');
+      if (nameLabel) nameLabel.setAttribute("for", `source_name_${index}`);
+
+      const amountLabel = source.querySelector('label[for^="source_amount"]');
+      if (amountLabel)
+        amountLabel.setAttribute("for", `source_amount_${index}`);
+    });
+  }
+
+  // Form submission handler to ensure proper indexing
+  document
+    .getElementById("sourcesForm")
+    .addEventListener("submit", function (e) {
+      reindexSources();
+    });
 </script>
 
 <style>
@@ -296,6 +484,21 @@ block content %}
       opacity: 1;
       transform: translateY(0);
     }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+  }
+
+  .source-item {
+    transition: all 0.3s ease;
   }
 
   .form-control:focus,

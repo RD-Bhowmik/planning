@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up - Finance Tracker</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+
+      .signup-container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        max-width: 1000px;
+        width: 100%;
+        display: flex;
+        animation: fadeInUp 0.6s ease;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .signup-left {
+        flex: 1;
+        padding: 3rem;
+        background: white;
+      }
+
+      .signup-right {
+        flex: 1;
+        background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);
+        padding: 3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-align: center;
+      }
+
+      .signup-right h2 {
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+      }
+
+      .signup-right p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 2rem;
+      }
+
+      .signup-right i {
+        font-size: 8rem;
+        opacity: 0.2;
+        margin-bottom: 2rem;
+      }
+
+      .form-control {
+        border-radius: 12px;
+        border: 2px solid #e9ecef;
+        padding: 0.9rem 1.2rem;
+        transition: all 0.3s ease;
+      }
+
+      .form-control:focus {
+        border-color: #0ba360;
+        box-shadow: 0 0 0 0.2rem rgba(11, 163, 96, 0.15);
+      }
+
+      .btn-success {
+        background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);
+        border: none;
+        border-radius: 12px;
+        padding: 0.9rem 2rem;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(11, 163, 96, 0.4);
+        transition: all 0.3s ease;
+      }
+
+      .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(11, 163, 96, 0.5);
+      }
+
+      .brand {
+        font-weight: 700;
+        font-size: 2rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .brand i {
+        -webkit-text-fill-color: #667eea;
+        font-size: 2.5rem;
+      }
+
+      .alert {
+        border-radius: 12px;
+        border: none;
+      }
+
+      .password-strength {
+        height: 4px;
+        border-radius: 2px;
+        background: #e9ecef;
+        margin-top: 0.5rem;
+        overflow: hidden;
+      }
+
+      .password-strength-bar {
+        height: 100%;
+        transition: all 0.3s ease;
+        width: 0;
+      }
+
+      .strength-weak {
+        background: #dc3545;
+        width: 33%;
+      }
+
+      .strength-medium {
+        background: #ffc107;
+        width: 66%;
+      }
+
+      .strength-strong {
+        background: #0ba360;
+        width: 100%;
+      }
+
+      @media (max-width: 768px) {
+        .signup-container {
+          flex-direction: column;
+        }
+        .signup-right {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="signup-container">
+      <div class="signup-left">
+        <div class="brand">
+          <i class="bi bi-piggy-bank-fill"></i>
+          <span>Finance Tracker</span>
+        </div>
+        <p class="text-muted mb-4">Create your account and start tracking</p>
+
+        {% if error %}
+        <div
+          class="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          {{ error }}
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+          ></button>
+        </div>
+        {% endif %}
+
+        <form action="{{ url_for('signup') }}" method="post" id="signupForm">
+          <div class="mb-3">
+            <label for="username" class="form-label fw-semibold">
+              <i class="bi bi-person-circle me-1"></i> Username
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              placeholder="Choose a username"
+              required
+              autofocus
+              minlength="3"
+            />
+            <small class="text-muted">At least 3 characters</small>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label fw-semibold">
+              <i class="bi bi-envelope-fill me-1"></i> Email
+            </label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              placeholder="your.email@example.com"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label fw-semibold">
+              <i class="bi bi-lock-fill me-1"></i> Password
+            </label>
+            <div class="input-group">
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Create a strong password"
+                required
+                minlength="6"
+              />
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                id="togglePassword"
+                style="border-radius: 0 12px 12px 0"
+              >
+                <i class="bi bi-eye" id="toggleIcon"></i>
+              </button>
+            </div>
+            <div class="password-strength">
+              <div class="password-strength-bar" id="strengthBar"></div>
+            </div>
+            <small class="text-muted" id="strengthText"
+              >At least 6 characters</small
+            >
+          </div>
+
+          <div class="mb-4">
+            <label for="confirm_password" class="form-label fw-semibold">
+              <i class="bi bi-lock-fill me-1"></i> Confirm Password
+            </label>
+            <div class="input-group">
+              <input
+                type="password"
+                class="form-control"
+                id="confirm_password"
+                name="confirm_password"
+                placeholder="Confirm your password"
+                required
+              />
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                id="toggleConfirmPassword"
+                style="border-radius: 0 12px 12px 0"
+              >
+                <i class="bi bi-eye" id="toggleConfirmIcon"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="d-grid gap-3 mb-4">
+            <button type="submit" class="btn btn-success btn-lg">
+              <i class="bi bi-person-plus me-2"></i> Create Account
+            </button>
+          </div>
+        </form>
+
+        <div class="text-center mt-4">
+          <p class="text-muted">
+            Already have an account?
+            <a
+              href="{{ url_for('login') }}"
+              class="text-decoration-none fw-semibold"
+              style="color: #0ba360"
+            >
+              Sign in here
+            </a>
+          </p>
+        </div>
+      </div>
+
+      <div class="signup-right">
+        <i class="bi bi-star-fill"></i>
+        <h2>Start Your Journey</h2>
+        <p>
+          Join thousands of users managing their finances smarter. All your data
+          is secure and private.
+        </p>
+        <div class="mt-4">
+          <div class="d-flex justify-content-center gap-4 mb-3">
+            <div>
+              <i
+                class="bi bi-cloud-check"
+                style="font-size: 2rem; opacity: 1"
+              ></i>
+              <p class="small mb-0 mt-2">Saved</p>
+            </div>
+            <div>
+              <i
+                class="bi bi-lock-fill"
+                style="font-size: 2rem; opacity: 1"
+              ></i>
+              <p class="small mb-0 mt-2">Private</p>
+            </div>
+            <div>
+              <i class="bi bi-trophy" style="font-size: 2rem; opacity: 1"></i>
+              <p class="small mb-0 mt-2">Free</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Password strength checker
+      const passwordInput = document.getElementById("password");
+      const strengthBar = document.getElementById("strengthBar");
+      const strengthText = document.getElementById("strengthText");
+
+      passwordInput.addEventListener("input", function () {
+        const password = this.value;
+        let strength = 0;
+
+        if (password.length >= 6) strength++;
+        if (password.length >= 10) strength++;
+        if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+        if (/\d/.test(password)) strength++;
+        if (/[^a-zA-Z\d]/.test(password)) strength++;
+
+        strengthBar.className = "password-strength-bar";
+        if (strength <= 2) {
+          strengthBar.classList.add("strength-weak");
+          strengthText.textContent = "Weak password";
+          strengthText.style.color = "#dc3545";
+        } else if (strength <= 3) {
+          strengthBar.classList.add("strength-medium");
+          strengthText.textContent = "Medium strength";
+          strengthText.style.color = "#ffc107";
+        } else {
+          strengthBar.classList.add("strength-strong");
+          strengthText.textContent = "Strong password";
+          strengthText.style.color = "#0ba360";
+        }
+      });
+
+      // Form validation
+      document
+        .getElementById("signupForm")
+        .addEventListener("submit", function (e) {
+          const password = document.getElementById("password").value;
+          const confirmPassword =
+            document.getElementById("confirm_password").value;
+
+          if (password !== confirmPassword) {
+            e.preventDefault();
+            alert("Passwords do not match!");
+            return false;
+          }
+        });
+
+      // Password visibility toggle for main password
+      const togglePassword = document.getElementById("togglePassword");
+      const password = document.getElementById("password");
+      const toggleIcon = document.getElementById("toggleIcon");
+
+      togglePassword.addEventListener("click", function () {
+        const type =
+          password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+
+        if (type === "password") {
+          toggleIcon.classList.remove("bi-eye-slash");
+          toggleIcon.classList.add("bi-eye");
+        } else {
+          toggleIcon.classList.remove("bi-eye");
+          toggleIcon.classList.add("bi-eye-slash");
+        }
+      });
+
+      // Password visibility toggle for confirm password
+      const toggleConfirmPassword = document.getElementById(
+        "toggleConfirmPassword"
+      );
+      const confirmPassword = document.getElementById("confirm_password");
+      const toggleConfirmIcon = document.getElementById("toggleConfirmIcon");
+
+      toggleConfirmPassword.addEventListener("click", function () {
+        const type =
+          confirmPassword.getAttribute("type") === "password"
+            ? "text"
+            : "password";
+        confirmPassword.setAttribute("type", type);
+
+        if (type === "password") {
+          toggleConfirmIcon.classList.remove("bi-eye-slash");
+          toggleConfirmIcon.classList.add("bi-eye");
+        } else {
+          toggleConfirmIcon.classList.remove("bi-eye");
+          toggleConfirmIcon.classList.add("bi-eye-slash");
+        }
+      });
+    </script>
+  </body>
+</html>
