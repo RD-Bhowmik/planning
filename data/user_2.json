@@ -1,0 +1,35 @@
+{
+  "profile": {
+    "name": "Your Name",
+    "goal": "Financial Planning"
+  },
+  "settings": {
+    "target_currency": "AUD",
+    "bdt_to_aud_rate": 0.0126,
+    "bdt_to_usd_rate": 0.00821,
+    "bdt_to_nzd_rate": 0.0143,
+    "tax_rate_percent": 0.0,
+    "default_loan_repayment": 255.48,
+    "loan_interest_rate": 8.0,
+    "loan_period_months": 60,
+    "table_sort_order": "newest_first",
+    "exchange_rate_last_updated": "2025-10-15T01:25:46.307191",
+    "exchange_rate_source": "ExchangeRate-API"
+  },
+  "capital": {
+    "sources": [
+      {
+        "name": "Parents",
+        "amount_bdt": 3000000
+      },
+      {
+        "name": "Loan",
+        "amount_bdt": 1000000
+      }
+    ],
+    "expenses_from_capital": []
+  },
+  "monthly_cash_flow": [],
+  "expenses_from_savings": [],
+  "daily_income_tracker": []
+}

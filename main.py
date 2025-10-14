@@ -672,17 +672,32 @@ def update_loan():
     else:
         financial_data = load_financial_data(is_guest=True, guest_data=session.get('guest_financial_data'))
     
-    # Find and update the loan source
+    # Get loan amount from form
+    loan_amount_bdt = int(request.form['loan_amount_bdt'])
+    
+    # Find and update the loan source (case-insensitive)
+    loan_found = False
     for source in financial_data['capital']['sources']:
         if source.get('name', '').lower() == 'loan':
-            source['amount_bdt'] = int(request.form['loan_amount_bdt'])
+            source['amount_bdt'] = loan_amount_bdt
+            loan_found = True
+            print(f"Updated existing loan source: {loan_amount_bdt} BDT")
             break
     
-    # Update loan details
+    # If no loan source exists, create one
+    if not loan_found:
+        financial_data['capital']['sources'].append({
+            'name': 'Loan',
+            'amount_bdt': loan_amount_bdt
+        })
+        print(f"Created new loan source: {loan_amount_bdt} BDT")
+    
+    # Update loan details in settings
     financial_data['settings']['default_loan_repayment'] = float(request.form['loan_repayment'])
     financial_data['settings']['loan_interest_rate'] = float(request.form.get('loan_interest_rate', 0))
     financial_data['settings']['loan_period_months'] = int(request.form.get('loan_period_months', 12))
     
+    # Save changes
     save_user_financial_data(financial_data)
     flash('Loan details updated successfully!', 'success')
     return redirect(url_for('loan_page'))
