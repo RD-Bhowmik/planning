@@ -1,28 +1,16 @@
 {
-  "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "api/index.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxDuration": 10
-      }
+      "source": "/(.*)",
+      "destination": "/api/index"
     }
   ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "api/index.py"
-    }
-  ],
-  "env": {
-    "PYTHON_VERSION": "3.9"
-  },
   "functions": {
     "api/index.py": {
+      "runtime": "python3.9",
       "memory": 512,
-      "maxDuration": 10
+      "maxDuration": 10,
+      "regions": ["sin1"]
     }
-  },
-  "regions": ["sin1"]
+  }
 }
