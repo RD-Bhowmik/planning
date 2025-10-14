@@ -19,21 +19,28 @@ class User(UserMixin):
 
 def init_db():
     """Initialize the user database"""
-    conn = sqlite3.connect(DATABASE_PATH)
-    cursor = conn.cursor()
-    
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            password_hash TEXT NOT NULL,
-            created_at TEXT NOT NULL
-        )
-    ''')
-    
-    conn.commit()
-    conn.close()
+    try:
+        conn = sqlite3.connect(DATABASE_PATH)
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT UNIQUE NOT NULL,
+                email TEXT UNIQUE NOT NULL,
+                password_hash TEXT NOT NULL,
+                created_at TEXT NOT NULL
+            )
+        ''')
+        
+        conn.commit()
+        conn.close()
+        
+        # Ensure database file is writable
+        os.chmod(DATABASE_PATH, 0o666)
+    except Exception as e:
+        print(f"ERROR initializing database: {e}")
+        raise
 
 def create_user(username, email, password):
     """Create a new user with hashed password"""

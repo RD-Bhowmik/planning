@@ -345,12 +345,19 @@ def update_sources():
     else:
         financial_data = load_financial_data(is_guest=True, guest_data=session.get('guest_financial_data'))
     
+    print("="*50)
+    print("UPDATE SOURCES - Backend Debug")
+    print("="*50)
+    print(f"All form keys: {list(request.form.keys())}")
+    
     # Collect all sources from form data
     new_sources = []
     index = 0
     while f'source_name_{index}' in request.form:
         name = request.form.get(f'source_name_{index}')
         amount_bdt = request.form.get(f'source_amount_{index}')
+        
+        print(f"Index {index}: name='{name}', amount='{amount_bdt}'")
         
         if name and amount_bdt:
             new_sources.append({
@@ -359,18 +366,24 @@ def update_sources():
             })
         index += 1
     
-    # Debug logging
-    print(f"DEBUG: Received {len(new_sources)} sources from form")
+    print(f"\nFinal result: {len(new_sources)} sources collected")
     for i, source in enumerate(new_sources):
         print(f"  Source {i}: {source['name']} = {source['amount_bdt']} BDT")
     
+    print(f"\nOld sources count: {len(financial_data['capital']['sources'])}")
+    
     # Update sources in financial data
     financial_data['capital']['sources'] = new_sources
+    
+    print(f"New sources count: {len(financial_data['capital']['sources'])}")
             
     # Update exchange rate
     financial_data['settings']['bdt_to_aud_rate'] = float(request.form['bdt_to_aud_rate'])
     
     save_user_financial_data(financial_data)
+    print("Data saved successfully!")
+    print("="*50)
+    
     flash(f'Capital sources updated successfully! ({len(new_sources)} sources saved)', 'success')
     return redirect(url_for('sources_page'))
 

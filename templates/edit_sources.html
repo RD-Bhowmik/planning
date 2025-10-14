@@ -378,7 +378,7 @@ block content %}
   }
 
   function updateSourceCount() {
-    const sources = document.querySelectorAll(".source-item:not(.removing)");
+    const sources = document.querySelectorAll(".source-item");
     const count = sources.length;
     document.getElementById("sourceCount").textContent = count;
 
@@ -482,14 +482,14 @@ block content %}
     sourceItem.style.opacity = "0";
     sourceItem.style.transform = "scale(0.95)";
 
-    // Reindex immediately (excluding items marked for removal)
-    reindexSources();
-    updateSourceCount();
-
-    // Actually remove from DOM after animation
+    // Remove from DOM immediately (don't wait for animation to complete)
+    // This ensures the form doesn't include it
     setTimeout(() => {
       sourceItem.remove();
-    }, 200);
+      // Reindex after removal
+      reindexSources();
+      updateSourceCount();
+    }, 50);
   }
 
   function clearAllSources() {
@@ -521,20 +521,24 @@ block content %}
   }
 
   function reindexSources() {
-    // Only reindex sources that are not being removed
-    const sources = document.querySelectorAll(".source-item:not(.removing)");
+    // Only reindex actual source items (removed items are already gone from DOM)
+    const sources = document.querySelectorAll(".source-item");
     sources.forEach((source, index) => {
       source.setAttribute("data-index", index);
 
       // Update name field
       const nameInput = source.querySelector(".source-name");
-      nameInput.id = `source_name_${index}`;
-      nameInput.name = `source_name_${index}`;
+      if (nameInput) {
+        nameInput.id = `source_name_${index}`;
+        nameInput.name = `source_name_${index}`;
+      }
 
       // Update amount field
       const amountInput = source.querySelector(".source-amount");
-      amountInput.id = `source_amount_${index}`;
-      amountInput.name = `source_amount_${index}`;
+      if (amountInput) {
+        amountInput.id = `source_amount_${index}`;
+        amountInput.name = `source_amount_${index}`;
+      }
 
       // Update labels
       const nameLabel = source.querySelector('label[for^="source_name"]');
@@ -553,8 +557,8 @@ block content %}
       // Always reindex before submitting to ensure sequential indices
       reindexSources();
 
-      // Validate we have at least one source (excluding ones being removed)
-      const sources = document.querySelectorAll(".source-item:not(.removing)");
+      // Validate we have at least one source
+      const sources = document.querySelectorAll(".source-item");
       if (sources.length === 0) {
         e.preventDefault();
         alert("You must add at least one capital source before saving!");
@@ -562,12 +566,14 @@ block content %}
       }
 
       // Debug: Log what will be submitted
+      console.log("=== FORM SUBMISSION DEBUG ===");
       console.log("Submitting " + sources.length + " sources:");
       sources.forEach((source, index) => {
         const name = source.querySelector(".source-name").value;
         const amount = source.querySelector(".source-amount").value;
-        console.log(`Source ${index}: ${name} = ${amount} BDT`);
+        console.log(`  Source ${index}: ${name} = ${amount} BDT`);
       });
+      console.log("============================");
     });
 
   // Initialize source count on page load
