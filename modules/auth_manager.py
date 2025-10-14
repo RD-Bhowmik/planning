@@ -43,6 +43,10 @@ def init_db():
                     created_at TIMESTAMP NOT NULL
                 )
             ''')
+            
+            # Create indexes for faster lookups
+            cursor.execute('CREATE INDEX IF NOT EXISTS idx_users_username ON users(username)')
+            cursor.execute('CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)')
         else:
             # SQLite syntax
             cursor.execute('''

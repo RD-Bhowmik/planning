@@ -8,10 +8,11 @@ IS_VERCEL = os.environ.get('VERCEL') or os.environ.get('VERCEL_ENV')
 USE_POSTGRES = os.environ.get('POSTGRES_URL') is not None
 
 if USE_POSTGRES:
-    # Vercel Postgres connection string
-    DATABASE_URL = os.environ.get('POSTGRES_URL')
+    # Use POOLED connection for better performance
+    # POSTGRES_PRISMA_URL has connection pooling enabled
+    DATABASE_URL = os.environ.get('POSTGRES_PRISMA_URL') or os.environ.get('POSTGRES_URL')
     DB_TYPE = 'postgres'
-    print(f"Using PostgreSQL database")
+    print(f"Using PostgreSQL database (pooled connection)")
 else:
     # Local SQLite fallback
     DATABASE_URL = 'data/users.db'

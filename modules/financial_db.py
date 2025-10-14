@@ -33,6 +33,9 @@ def init_financial_tables():
             )
         ''')
         
+        # Create index for faster lookups
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_financial_user_id ON financial_data(user_id)')
+        
         conn.commit()
         conn.close()
         print("✓ Financial tables initialized (PostgreSQL)")
