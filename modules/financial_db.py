@@ -8,10 +8,19 @@ from modules.db_config import DB_TYPE, DATABASE_URL
 from modules.cache import get_cached, set_cache, invalidate_user_cache
 
 # Import appropriate database driver
+USE_POOL = False  # Default: no pool
+
 if DB_TYPE == 'postgres':
     import psycopg2
     from psycopg2.extras import RealDictCursor, Json
-    from modules.db_pool import get_connection, return_connection
+    try:
+        from modules.db_pool import get_connection, return_connection
+        USE_POOL = True
+        print("✓ Connection pool available")
+    except Exception as e:
+        print(f"⚠ Connection pool not available: {e}")
+        print("  Using direct connections (slower but works)")
+        USE_POOL = False
 
 def init_financial_tables():
     """Initialize financial data tables in PostgreSQL"""
@@ -88,7 +97,11 @@ def load_financial_data_postgres(user_id):
     # If not in cache, load from database
     conn = None
     try:
-        conn = get_connection()  # Get from connection pool
+        # Use pool if available, otherwise direct connection
+        if USE_POOL:
+            conn = get_connection()
+        else:
+            conn = psycopg2.connect(DATABASE_URL, sslmode='require')
         cursor = conn.cursor(cursor_factory=RealDictCursor)
         
         cursor.execute('''
@@ -122,13 +135,20 @@ def load_financial_data_postgres(user_id):
         return None
     finally:
         if conn:
-            return_connection(conn)  # Return to pool
+            if USE_POOL:
+                return_connection(conn)
+            else:
+                conn.close()
 
 def save_financial_data_postgres(user_id, data):
     """Save financial data to PostgreSQL and invalidate cache"""
     conn = None
     try:
-        conn = get_connection()  # Get from connection pool
+        # Use pool if available, otherwise direct connection
+        if USE_POOL:
+            conn = get_connection()
+        else:
+            conn = psycopg2.connect(DATABASE_URL, sslmode='require')
         cursor = conn.cursor()
         
         cursor.execute('''
@@ -169,7 +189,10 @@ def save_financial_data_postgres(user_id, data):
         return False
     finally:
         if conn:
-            return_connection(conn)  # Return to pool
+            if USE_POOL:
+                return_connection(conn)
+            else:
+                conn.close()
 
 def load_financial_data_json(user_id=None, is_guest=False, guest_data=None):
     """Load financial data from JSON files (fallback for local/SQLite)"""
