@@ -30,7 +30,7 @@ block content %}
       );
     "
   >
-    <div class="card-body p-4">
+    <div class="card-body p-3">
       <div class="row align-items-center">
         <div class="col-md-3">
           <h6 class="mb-2 fw-bold">
@@ -88,35 +88,35 @@ block content %}
   </div>
 </header>
 
-<div class="row g-4 mb-5">
+<div class="row g-4 mb-4">
   {% set colors = [ 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
   'linear-gradient(135deg, #0ba360 0%, #3cba92 100%)', 'linear-gradient(135deg,
   #f093fb 0%, #f5576c 100%)' ] %} {% for source in capital.sources %}
   <div class="col-md-4">
     <div class="card h-100 border-0 shadow-lg" style="overflow: hidden">
       <div
-        class="card-header text-white text-center py-4"
+        class="card-header text-white text-center py-3"
         style="background: {{ colors[loop.index0 % 3] }};"
       >
         <i
           class="bi bi-{% if source.name == 'Parents' %}heart-fill{% elif source.name == 'Jethu' %}people-fill{% else %}bank{% endif %} fs-1"
         ></i>
-        <h2 class="mt-3 mb-0 fw-bold">{{ source.name }}</h2>
+        <h2 class="mt-2 mb-0 fw-bold">{{ source.name }}</h2>
       </div>
-      <div class="card-body text-center p-4">
-        <div class="mb-3">
+      <div class="card-body text-center p-3">
+        <div class="mb-2">
           <p
-            class="display-4 fw-bold mb-2"
+            class="display-5 fw-bold mb-1"
             style="background: {{ colors[loop.index0 % 3] }}; -webkit-background-clip: text; -webkit-text-fill-color: transparent;"
           >
             {{ "%.2f"|format(source.amount_aud) }}
           </p>
-          <span class="fs-5 text-muted fw-semibold"
+          <span class="fs-6 text-muted fw-semibold"
             >{{ settings.get('target_currency', 'AUD') }}</span
           >
         </div>
-        <div class="p-3 rounded" style="background: rgba(102, 126, 234, 0.05)">
-          <p class="h5 text-muted mb-0">
+        <div class="p-2 rounded" style="background: rgba(102, 126, 234, 0.05)">
+          <p class="h6 text-muted mb-0">
             <i class="bi bi-currency-exchange"></i> {{
             "{:,.0f}".format(source.amount_bdt) }} BDT
           </p>
@@ -139,8 +139,8 @@ block content %}
         );
       "
     >
-      <div class="card-body text-center p-5">
-        <div class="mb-4">
+      <div class="card-body text-center p-3">
+        <div class="mb-2">
           <i
             class="bi bi-piggy-bank-fill fs-1"
             style="
@@ -150,9 +150,9 @@ block content %}
             "
           ></i>
         </div>
-        <h3 class="fw-bold mb-3">Total Initial Capital</h3>
+        <h3 class="fw-bold mb-2">Total Initial Capital</h3>
         <p
-          class="display-3 fw-bold mb-3"
+          class="display-4 fw-bold mb-2"
           style="
             background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);
             -webkit-background-clip: text;
@@ -162,12 +162,12 @@ block content %}
           {{ "%.2f"|format(capital.total_capital_aud) }} {{
           settings.get('target_currency', 'AUD') }}
         </p>
-        <p class="h4 text-muted mb-4">
+        <p class="h5 text-muted mb-3">
           {{ "{:,.0f}".format(capital.sources|sum(attribute='amount_bdt')) }}
           BDT
         </p>
         <div
-          class="alert alert-light border-0 d-inline-block px-4 py-3 shadow-sm"
+          class="alert alert-light border-0 d-inline-block px-3 py-2 shadow-sm"
         >
           <i class="bi bi-info-circle-fill text-primary"></i>
           <small class="fw-semibold"
@@ -190,8 +190,8 @@ block content %}
         );
       "
     >
-      <div class="card-body p-5">
-        <div class="text-center mb-4">
+      <div class="card-body p-3">
+        <div class="text-center mb-3">
           <i
             class="bi bi-arrow-left-right fs-1"
             style="
@@ -201,10 +201,10 @@ block content %}
             "
           ></i>
         </div>
-        <h3 class="fw-bold text-center mb-4">Exchange Rate</h3>
+        <h3 class="fw-bold text-center mb-3">Exchange Rate</h3>
 
-        <div class="text-center mb-4">
-          <p class="h5 text-muted mb-2">1 BDT =</p>
+        <div class="text-center mb-3">
+          <p class="h6 text-muted mb-2">1 BDT =</p>
           <p
             id="current-rate-display"
             class="display-4 fw-bold"
@@ -221,7 +221,7 @@ block content %}
 
         <div
           id="rate-status"
-          class="alert alert-light border-0 shadow-sm mb-4"
+          class="alert alert-light border-0 shadow-sm mb-3"
           style="background: white"
         >
           <div class="d-flex align-items-center justify-content-center">
@@ -238,12 +238,12 @@ block content %}
           </div>
         </div>
 
-        <div id="rate-message" class="mb-3"></div>
+        <div id="rate-message" class="mb-2"></div>
 
         <div class="d-grid">
           <button
             type="button"
-            class="btn btn-success btn-lg py-3 shadow"
+            class="btn btn-success btn-lg py-2 shadow"
             id="fetchRateBtn"
             onclick="fetchExchangeRate()"
           >

@@ -143,7 +143,7 @@
         box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
       }
 
-      main.container {
+      main.main-content {
         background: rgba(255, 255, 255, 0.95);
         border-radius: 20px;
         padding: 2.5rem;
@@ -152,6 +152,9 @@
         box-shadow: var(--card-shadow);
         backdrop-filter: blur(10px);
         animation: fadeInUp 0.6s ease;
+        max-width: 1400px;
+        margin-left: auto;
+        margin-right: auto;
       }
 
       @keyframes fadeInUp {
@@ -266,6 +269,16 @@
         color: white;
         font-weight: 600;
         border: none;
+        padding: 1rem 1.25rem !important;
+      }
+
+      .table tbody td {
+        padding: 1rem 1.25rem !important;
+        vertical-align: middle;
+      }
+
+      .table tfoot td {
+        padding: 1rem 1.25rem !important;
       }
 
       .progress {
@@ -484,82 +497,88 @@
     </nav>
 
     {% if not current_user.is_authenticated %}
-    <div class="container mt-3">
-      <div
-        class="alert alert-dismissible fade show"
-        role="alert"
-        style="
-          background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-          border: none;
-          border-radius: 16px;
-          box-shadow: 0 4px 12px rgba(240, 147, 251, 0.3);
-          color: white;
-        "
-      >
-        <div class="d-flex align-items-center">
-          <i class="bi bi-exclamation-triangle-fill fs-2 me-3"></i>
-          <div class="flex-grow-1">
-            <h5 class="mb-1 fw-bold">You're using Guest Mode</h5>
-            <p class="mb-2">
-              Your data is temporary and will be lost when you close your
-              browser.
-            </p>
-            <a
-              href="{{ url_for('signup') }}"
-              class="btn btn-light btn-sm fw-semibold me-2"
-              style="border-radius: 8px"
-            >
-              <i class="bi bi-person-plus me-1"></i> Create Free Account
-            </a>
-            <a
-              href="{{ url_for('login') }}"
-              class="btn btn-outline-light btn-sm fw-semibold"
-              style="border-radius: 8px"
-            >
-              <i class="bi bi-box-arrow-in-right me-1"></i> Login
-            </a>
+    <div class="container-fluid px-3 px-md-5 mt-3">
+      <div style="max-width: 1400px; margin: 0 auto">
+        <div
+          class="alert alert-dismissible fade show"
+          role="alert"
+          style="
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(240, 147, 251, 0.3);
+            color: white;
+          "
+        >
+          <div class="d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle-fill fs-2 me-3"></i>
+            <div class="flex-grow-1">
+              <h5 class="mb-1 fw-bold">You're using Guest Mode</h5>
+              <p class="mb-2">
+                Your data is temporary and will be lost when you close your
+                browser.
+              </p>
+              <a
+                href="{{ url_for('signup') }}"
+                class="btn btn-light btn-sm fw-semibold me-2"
+                style="border-radius: 8px"
+              >
+                <i class="bi bi-person-plus me-1"></i> Create Free Account
+              </a>
+              <a
+                href="{{ url_for('login') }}"
+                class="btn btn-outline-light btn-sm fw-semibold"
+                style="border-radius: 8px"
+              >
+                <i class="bi bi-box-arrow-in-right me-1"></i> Login
+              </a>
+            </div>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+            ></button>
           </div>
-          <button
-            type="button"
-            class="btn-close btn-close-white"
-            data-bs-dismiss="alert"
-            aria-label="Close"
-          ></button>
         </div>
       </div>
     </div>
     {% endif %} {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-    <div class="container mt-3">
-      {% for category, message in messages %}
-      <div
-        class="alert alert-{{ category }} alert-dismissible fade show"
-        role="alert"
-        style="
-          border-radius: 12px;
-          border: none;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        "
-      >
-        {% if category == 'success' %}
-        <i class="bi bi-check-circle-fill me-2"></i>
-        {% elif category == 'danger' %}
-        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-        {% elif category == 'info' %}
-        <i class="bi bi-info-circle-fill me-2"></i>
-        {% endif %} {{ message }}
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
+    <div class="container-fluid px-3 px-md-5 mt-3">
+      <div style="max-width: 1400px; margin: 0 auto">
+        {% for category, message in messages %}
+        <div
+          class="alert alert-{{ category }} alert-dismissible fade show"
+          role="alert"
+          style="
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          "
+        >
+          {% if category == 'success' %}
+          <i class="bi bi-check-circle-fill me-2"></i>
+          {% elif category == 'danger' %}
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          {% elif category == 'info' %}
+          <i class="bi bi-info-circle-fill me-2"></i>
+          {% endif %} {{ message }}
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+        {% endfor %}
       </div>
-      {% endfor %}
     </div>
     {% endif %} {% endwith %}
 
-    <main class="container mt-4">{% block content %}{% endblock %}</main>
+    <div class="container-fluid px-3 px-md-5">
+      <main class="main-content">{% block content %}{% endblock %}</main>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
