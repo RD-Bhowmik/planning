@@ -120,6 +120,10 @@ def get_all_financial_data():
     bdt_rate, target_currency = get_currency_rate(settings_data)
     settings_data['current_rate'] = bdt_rate
     settings_data['target_currency'] = target_currency
+    
+    # Ensure bdt_to_aud_rate exists for edit page (default if not set)
+    if 'bdt_to_aud_rate' not in settings_data:
+        settings_data['bdt_to_aud_rate'] = 0.0127  # Default AUD rate
 
     # Convert BDT sources to AUD and calculate total capital
     total_capital_aud = 0
@@ -342,8 +346,23 @@ def monthly_summary_page():
 
 @app.route('/edit_sources', methods=['GET', 'POST'])
 def edit_sources_page():
-    data = get_all_financial_data()
-    return render_template('edit_sources.html', **data) if data else make_response("Error loading financial data", 500)
+    try:
+        data = get_all_financial_data()
+        if not data:
+            print("ERROR: get_all_financial_data() returned None")
+            return make_response("Error loading financial data", 500)
+        
+        # Ensure current_rate exists
+        if 'current_rate' not in data.get('settings', {}):
+            print("WARNING: current_rate not in settings, setting default")
+            data['settings']['current_rate'] = 0.0127  # Default AUD rate
+        
+        return render_template('edit_sources.html', **data)
+    except Exception as e:
+        print(f"ERROR in edit_sources_page: {e}")
+        import traceback
+        traceback.print_exc()
+        return make_response(f"Error loading page: {str(e)}", 500)
 
 @app.route('/update_sources', methods=['POST'])
 def update_sources():
@@ -386,7 +405,13 @@ def update_sources():
     print(f"New sources count: {len(financial_data['capital']['sources'])}")
             
     # Update exchange rate
-    financial_data['settings']['bdt_to_aud_rate'] = float(request.form['bdt_to_aud_rate'])
+    new_rate = float(request.form['bdt_to_aud_rate'])
+    financial_data['settings']['bdt_to_aud_rate'] = new_rate
+    
+    # Update current_rate if target currency is AUD
+    target_currency = financial_data['settings'].get('target_currency', 'AUD')
+    if target_currency == 'AUD':
+        financial_data['settings']['current_rate'] = new_rate
     
     save_user_financial_data(financial_data)
     print("Data saved successfully!")
