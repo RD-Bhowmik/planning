@@ -37,7 +37,8 @@ block content %}
               </div>
               <div class="form-text mt-2">
                 <i class="bi bi-info-circle"></i> Current exchange rate: 1 BDT =
-                {{ settings.bdt_to_aud_rate }} AUD
+                {{ settings.bdt_to_aud_rate }} {{
+                settings.get('target_currency', 'AUD') }}
               </div>
             </div>
 
@@ -63,7 +64,8 @@ block content %}
                     class="fs-4 fw-bold"
                     style="color: #667eea"
                   >
-                    {{ "%.2f"|format(loan_data.amount_aud) }} AUD
+                    {{ "%.2f"|format(loan_data.amount_aud) }} {{
+                    settings.get('target_currency', 'AUD') }}
                   </span>
                 </div>
               </div>
@@ -166,7 +168,8 @@ block content %}
                     class="fs-3 fw-bold"
                     style="color: #ff9800"
                   >
-                    {{ "%.2f"|format(loan_data.amount_aud) }} AUD
+                    {{ "%.2f"|format(loan_data.amount_aud) }} {{
+                    settings.get('target_currency', 'AUD') }}
                   </span>
                 </div>
               </div>
@@ -191,7 +194,8 @@ block content %}
                     class="fs-3 fw-bold"
                     style="color: #0ba360"
                   >
-                    {{ "%.2f"|format(settings.default_loan_repayment) }} AUD
+                    {{ "%.2f"|format(settings.default_loan_repayment) }} {{
+                    settings.get('target_currency', 'AUD') }}
                   </span>
                   <div class="small text-muted mt-1">
                     <i class="bi bi-info-circle"></i> This will automatically
@@ -245,7 +249,7 @@ block content %}
 
     // Update converted amount
     convertedSpan.style.transform = 'scale(1.1)';
-    convertedSpan.textContent = audAmount.toFixed(2) + ' AUD';
+    convertedSpan.textContent = audAmount.toFixed(2) + ' {{ settings.get('target_currency', 'AUD') }}';
     setTimeout(() => {
       convertedSpan.style.transform = 'scale(1)';
     }, 200);
@@ -270,13 +274,13 @@ block content %}
 
     // Update UI with animation
     totalWithInterestSpan.style.transform = 'scale(1.1)';
-    totalWithInterestSpan.textContent = totalWithInterest.toFixed(2) + ' AUD';
+    totalWithInterestSpan.textContent = totalWithInterest.toFixed(2) + ' {{ settings.get('target_currency', 'AUD') }}';
     setTimeout(() => {
       totalWithInterestSpan.style.transform = 'scale(1)';
     }, 200);
 
     monthlyPaymentSpan.style.transform = 'scale(1.1)';
-    monthlyPaymentSpan.textContent = monthlyPayment.toFixed(2) + ' AUD';
+    monthlyPaymentSpan.textContent = monthlyPayment.toFixed(2) + ' {{ settings.get('target_currency', 'AUD') }}';
     hiddenMonthlyPayment.value = monthlyPayment.toFixed(2);
     setTimeout(() => {
       monthlyPaymentSpan.style.transform = 'scale(1)';

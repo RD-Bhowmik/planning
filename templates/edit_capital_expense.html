@@ -23,7 +23,9 @@ block content %}
             />
           </div>
           <div class="mb-3">
-            <label for="amount" class="form-label">Amount (AUD)</label>
+            <label for="amount" class="form-label"
+              >Amount ({{ settings.get('target_currency', 'AUD') }})</label
+            >
             <input
               type="number"
               step="0.01"

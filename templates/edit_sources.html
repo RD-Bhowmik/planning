@@ -162,7 +162,8 @@ block content %}
                       class="fw-bold"
                       style="color: {{ colors[loop.index0 % 6] }};"
                     >
-                      {{ "%.2f"|format(source.amount_aud) }} AUD
+                      {{ "%.2f"|format(source.amount_aud) }} {{
+                      settings.get('target_currency', 'AUD') }}
                     </span>
                   </small>
                 </div>

@@ -31,7 +31,9 @@ block content %}
           <p class="h3 fw-bold text-success mb-1">
             {{ "%.2f"|format(remaining_capital) }}
           </p>
-          <p class="text-muted small mb-1">AUD</p>
+          <p class="text-muted small mb-1">
+            {{ settings.get('target_currency', 'AUD') }}
+          </p>
           <small class="text-muted fst-italic" style="font-size: 0.75rem">
             <i class="bi bi-info-circle"></i> Included in your Net Savings
           </small>
@@ -59,7 +61,8 @@ block content %}
         <i class="bi bi-piggy-bank fs-4 mb-2" style="color: #667eea"></i>
         <h6 class="text-muted mb-2 fw-semibold small">Total Initial Capital</h6>
         <p class="h4 mb-0 fw-bold" style="color: #667eea">
-          {{ "%.2f"|format(capital.total_capital_aud) }} AUD
+          {{ "%.2f"|format(capital.total_capital_aud) }} {{
+          settings.get('target_currency', 'AUD') }}
         </p>
       </div>
     </div>
@@ -82,7 +85,7 @@ block content %}
         <p class="h4 mb-0 fw-bold text-danger">
           {{
           "%.2f"|format(capital.expenses_from_capital|sum(attribute='amount'))
-          }} AUD
+          }} {{ settings.get('target_currency', 'AUD') }}
         </p>
       </div>
     </div>
@@ -178,26 +181,29 @@ block content %}
               {% set sorted_expenses = capital.expenses_from_capital|reverse if
               settings.get('table_sort_order', 'newest_first') == 'newest_first'
               else capital.expenses_from_capital %} {% for expense in
-              sorted_expenses %}
+              sorted_expenses %} {% set original_index =
+              (capital.expenses_from_capital|length - 1 - loop.index0) if
+              settings.get('table_sort_order', 'newest_first') == 'newest_first'
+              else loop.index0 %}
               <tr>
                 <td class="py-3 px-4 fw-semibold">{{ expense.name }}</td>
                 <td class="py-3 px-4 text-end text-danger fw-semibold">
-                  {{ "%.2f"|format(expense.amount) }} AUD
+                  {{ "%.2f"|format(expense.amount) }} {{
+                  settings.get('target_currency', 'AUD') }}
                 </td>
                 <td class="py-3 px-4 text-center">
                   <div class="btn-group btn-group-sm">
                     <a
-                      href="{{ url_for('edit_capital_expense', index=loop.index0) }}"
+                      href="{{ url_for('edit_capital_expense', index=original_index) }}"
                       class="btn btn-outline-primary"
                       title="Edit"
                     >
                       <i class="bi bi-pencil"></i>
                     </a>
                     <a
-                      href="{{ url_for('delete_item', list_name='capital_expenses', index=loop.index0) }}"
+                      href="{{ url_for('delete_item', list_name='capital_expenses', index=original_index) }}"
                       class="btn btn-outline-danger"
                       title="Delete"
-                      onclick="return confirm('Delete this expense?');"
                     >
                       <i class="bi bi-trash"></i>
                     </a>
@@ -212,7 +218,7 @@ block content %}
                 <td class="py-3 px-4 text-end text-danger">
                   {{
                   "%.2f"|format(capital.expenses_from_capital|sum(attribute='amount'))
-                  }} AUD
+                  }} {{ settings.get('target_currency', 'AUD') }}
                 </td>
                 <td></td>
               </tr>
@@ -266,7 +272,9 @@ block content %}
                 <i class="bi bi-currency-dollar"></i> Amount
               </label>
               <div class="input-group input-group-lg">
-                <span class="input-group-text">AUD</span>
+                <span class="input-group-text"
+                  >{{ settings.get('target_currency', 'AUD') }}</span
+                >
                 <input
                   type="number"
                   step="0.01"
@@ -400,10 +408,45 @@ block content %}
       font-size: 1.25rem !important;
     }
 
-    /* Table - more compact on phones */
+    /* Table - more compact on phones - MATCHING LOAN MANAGEMENT */
+    .table {
+      font-size: 0.7rem !important;
+    }
+
+    .table thead th,
+    .table tbody td,
+    .table tfoot td {
+      padding: 0.4rem 0.25rem !important;
+      font-size: 0.7rem !important;
+    }
+
+    /* Disable sticky headers on mobile */
+    .table thead.sticky-top,
+    .table tfoot.sticky-bottom {
+      position: relative !important;
+      top: auto !important;
+      bottom: auto !important;
+    }
+
+    /* Hide icons in tables to save space - but keep action button icons */
+    .table thead th i {
+      display: none !important;
+    }
+
+    .table tbody td i {
+      display: none !important;
+    }
+
+    /* Show action button icons */
+    .table tbody td .btn i {
+      display: inline-block !important;
+    }
+
     .table-responsive {
-      max-height: 350px !important;
-      overflow-x: auto;
+      max-height: 500px !important;
+      overflow-x: auto !important;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch;
     }
 
     .table tbody tr:hover {
@@ -413,6 +456,11 @@ block content %}
     /* Action buttons in table - smaller */
     .btn-group-sm {
       gap: 0.15rem;
+    }
+
+    .btn-group-sm .btn {
+      padding: 0.25rem 0.35rem;
+      font-size: 0.7rem;
     }
 
     /* Form section - optimize */
@@ -467,13 +515,26 @@ block content %}
   @media (max-width: 375px) {
     /* Ultra compact mode */
     .table {
-      font-size: 0.7rem !important;
+      font-size: 0.65rem !important;
     }
 
     .table thead th,
     .table tbody td,
     .table tfoot td {
-      padding: 0.4rem 0.25rem !important;
+      padding: 0.35rem 0.2rem !important;
+      font-size: 0.65rem !important;
+    }
+
+    /* Double-ensure sticky is disabled */
+    .table thead.sticky-top,
+    .table tfoot.sticky-bottom {
+      position: relative !important;
+      top: auto !important;
+      bottom: auto !important;
+    }
+
+    .table-responsive {
+      max-height: 400px !important;
     }
 
     /* Form inputs even smaller */

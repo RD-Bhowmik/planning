@@ -4,18 +4,18 @@
     "goal": "Financial Planning"
   },
   "settings": {
-    "bdt_to_aud_rate": 0.0126,
+    "bdt_to_aud_rate": 0.0127,
     "tax_rate_percent": 0.0,
     "default_loan_repayment": 255.48,
-    "exchange_rate_last_updated": "2025-10-15T02:39:53.649049",
+    "exchange_rate_last_updated": "2025-10-15T14:56:11.883478",
     "exchange_rate_source": "ExchangeRate-API",
-    "target_currency": "USD",
+    "target_currency": "AUD",
     "loan_interest_rate": 8.0,
     "loan_period_months": 60,
     "bdt_to_usd_rate": 0.00821,
-    "bdt_to_nzd_rate": 0.0143,
+    "bdt_to_nzd_rate": 0.0144,
     "table_sort_order": "newest_first",
-    "current_rate": 0.00821
+    "current_rate": 0.0127
   },
   "capital": {
     "sources": [
@@ -32,44 +32,7 @@
         "amount_bdt": 2365000
       }
     ],
-    "expenses_from_capital": [
-      {
-        "name": "departure money with 1st semester and july accommodation fee",
-        "amount": 25000.0
-      },
-      {
-        "name": "2nd Semester fee",
-        "amount": 16470.0
-      },
-      {
-        "name": "august accommodation ",
-        "amount": 2000.0
-      },
-      {
-        "name": "september accommodation",
-        "amount": 2000.0
-      },
-      {
-        "name": "october accommodation",
-        "amount": 2000.0
-      },
-      {
-        "name": "november accmmodation",
-        "amount": 2000.0
-      },
-      {
-        "name": "december accmmodation",
-        "amount": 2000.0
-      },
-      {
-        "name": "january accmmodation",
-        "amount": 2000.0
-      },
-      {
-        "name": "february accmmodation",
-        "amount": 2000.0
-      }
-    ]
+    "expenses_from_capital": []
   },
   "monthly_cash_flow": [
     {
@@ -91,13 +54,14 @@
       "month": "2027-01",
       "income": 8000.0,
       "loan_repayment": 255.48
-    },
-    {
-      "month": "2026-09",
-      "income": 2000.0,
-      "loan_repayment": 255.48
     }
   ],
   "expenses_from_savings": [],
-  "daily_income_tracker": []
+  "daily_income_tracker": [
+    {
+      "date": "2025-10-15",
+      "hours_worked": 5.0,
+      "gross_income": 200.0
+    }
+  ]
 }

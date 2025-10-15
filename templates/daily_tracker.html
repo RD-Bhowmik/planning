@@ -41,7 +41,9 @@ block content %}
         <p class="h3 mb-1 fw-bold text-success">
           {{ "%.2f"|format(total_net_daily_income) }}
         </p>
-        <p class="text-muted small mb-1">AUD</p>
+        <p class="text-muted small mb-1">
+          {{ settings.get('target_currency', 'AUD') }}
+        </p>
         <small class="text-muted fst-italic" style="font-size: 0.75rem">
           <i class="bi bi-info-circle"></i> After {{ settings.tax_rate_percent
           }}% tax
@@ -173,7 +175,10 @@ block content %}
             <tbody>
               {% set sorted_entries = daily_income_tracker|reverse if
               settings.get('table_sort_order', 'newest_first') == 'newest_first'
-              else daily_income_tracker %} {% for entry in sorted_entries %}
+              else daily_income_tracker %} {% for entry in sorted_entries %} {%
+              set original_index = (daily_income_tracker|length - 1 -
+              loop.index0) if settings.get('table_sort_order', 'newest_first')
+              == 'newest_first' else loop.index0 %}
               <tr>
                 <td class="py-3 px-4 fw-semibold">
                   {{ datetime.strptime(entry.date, '%Y-%m-%d').strftime('%B %d,
@@ -183,26 +188,27 @@ block content %}
                   <span class="badge bg-info">{{ entry.hours_worked }}h</span>
                 </td>
                 <td class="py-3 px-4 text-end text-muted">
-                  {{ "%.2f"|format(entry.gross_income) }} AUD
+                  {{ "%.2f"|format(entry.gross_income) }} {{
+                  settings.get('target_currency', 'AUD') }}
                 </td>
                 <td class="py-3 px-4 text-end fw-bold text-success">
                   {{ "%.2f"|format(calculate_net_income(entry.gross_income,
-                  settings.tax_rate_percent)) }} AUD
+                  settings.tax_rate_percent)) }} {{
+                  settings.get('target_currency', 'AUD') }}
                 </td>
                 <td class="py-3 px-4 text-center">
                   <div class="btn-group btn-group-sm">
                     <a
-                      href="{{ url_for('edit_daily_entry', index=loop.index0) }}"
+                      href="{{ url_for('edit_daily_entry', index=original_index) }}"
                       class="btn btn-outline-primary"
                       title="Edit"
                     >
                       <i class="bi bi-pencil"></i>
                     </a>
                     <a
-                      href="{{ url_for('delete_item', list_name='daily_income_tracker', index=loop.index0) }}"
+                      href="{{ url_for('delete_item', list_name='daily_income_tracker', index=original_index) }}"
                       class="btn btn-outline-danger"
                       title="Delete"
-                      onclick="return confirm('Delete this entry?');"
                     >
                       <i class="bi bi-trash"></i>
                     </a>
@@ -222,10 +228,11 @@ block content %}
                 <td class="py-3 px-4 text-end">
                   {{
                   "%.2f"|format(daily_income_tracker|sum(attribute='gross_income'))
-                  }} AUD
+                  }} {{ settings.get('target_currency', 'AUD') }}
                 </td>
                 <td class="py-3 px-4 text-end text-success">
-                  {{ "%.2f"|format(total_net_daily_income) }} AUD
+                  {{ "%.2f"|format(total_net_daily_income) }} {{
+                  settings.get('target_currency', 'AUD') }}
                 </td>
                 <td></td>
               </tr>
@@ -469,16 +476,45 @@ block content %}
       font-size: 1.25rem !important;
     }
 
-    /* Table - more compact */
+    /* Table - more compact - MATCHING LOAN MANAGEMENT */
     .table {
-      font-size: 0.75rem !important;
+      font-size: 0.7rem !important;
     }
 
     .table thead th,
     .table tbody td,
     .table tfoot td {
-      padding: 0.5rem 0.35rem !important;
-      font-size: 0.75rem;
+      padding: 0.4rem 0.25rem !important;
+      font-size: 0.7rem !important;
+    }
+
+    /* Disable sticky headers on mobile */
+    .table thead.sticky-top,
+    .table tfoot.sticky-bottom {
+      position: relative !important;
+      top: auto !important;
+      bottom: auto !important;
+    }
+
+    /* Hide icons in tables to save space - but keep action button icons */
+    .table thead th i {
+      display: none !important;
+    }
+
+    .table tbody td i {
+      display: none !important;
+    }
+
+    /* Show action button icons */
+    .table tbody td .btn i {
+      display: inline-block !important;
+    }
+
+    .table-responsive {
+      max-height: 500px !important;
+      overflow-x: auto !important;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch;
     }
 
     /* Disable hover transform on mobile */
@@ -537,13 +573,26 @@ block content %}
   @media (max-width: 375px) {
     /* Ultra compact table */
     .table {
-      font-size: 0.7rem !important;
+      font-size: 0.65rem !important;
     }
 
     .table thead th,
     .table tbody td,
     .table tfoot td {
-      padding: 0.4rem 0.25rem !important;
+      padding: 0.35rem 0.2rem !important;
+      font-size: 0.65rem !important;
+    }
+
+    /* Double-ensure sticky is disabled */
+    .table thead.sticky-top,
+    .table tfoot.sticky-bottom {
+      position: relative !important;
+      top: auto !important;
+      bottom: auto !important;
+    }
+
+    .table-responsive {
+      max-height: 400px !important;
     }
 
     /* Hide some table icons to save space */

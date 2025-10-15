@@ -151,12 +151,12 @@ def get_all_financial_data():
         else:
             loan_progress_percent = 0
         
-        # Calculate months remaining
-        monthly_repayment = settings_data.get('default_loan_repayment', 0)
-        if monthly_repayment > 0 and remaining_loan_balance > 0:
-            months_remaining = int(remaining_loan_balance / monthly_repayment) + 1
+        # Calculate months remaining - use total loan period from settings minus months already paid
+        loan_period_total = settings_data.get('loan_period_months', 60)
+        if remaining_loan_balance > 0 and loan_payment_count < loan_period_total:
+            months_remaining = loan_period_total - loan_payment_count
         else:
-            months_remaining = 0
+            months_remaining = 0 if remaining_loan_balance == 0 else loan_period_total
     else:
         # Default values if no loan found
         loan_data = {'amount_bdt': 0, 'amount_aud': 0}

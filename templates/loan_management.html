@@ -46,14 +46,16 @@ block content %}
                 font-weight: 800;
               "
             >
-              {{ "%.2f"|format(loan_data.amount_aud) }} AUD
+              {{ "%.2f"|format(loan_data.amount_aud) }} {{
+              settings.get('target_currency', 'AUD') }}
             </p>
             <p class="mb-1 text-muted small">
               {{ "{:,.0f}".format(loan_data.amount_bdt) }} BDT
             </p>
             <small class="text-muted fst-italic" style="font-size: 0.75rem">
               <i class="bi bi-calculator"></i> Rate: 1 BDT = {{
-              settings.bdt_to_aud_rate }} AUD
+              settings.bdt_to_aud_rate }} {{ settings.get('target_currency',
+              'AUD') }}
             </small>
           </div>
         </div>
@@ -83,7 +85,8 @@ block content %}
                 font-weight: 800;
               "
             >
-              {{ "%.2f"|format(settings.default_loan_repayment) }} AUD
+              {{ "%.2f"|format(settings.default_loan_repayment) }} {{
+              settings.get('target_currency', 'AUD') }}
             </p>
             <small class="text-muted fst-italic" style="font-size: 0.75rem">
               <i class="bi bi-arrow-repeat"></i> Deducted from monthly savings
@@ -108,12 +111,13 @@ block content %}
                 font-weight: 800;
               "
             >
-              {{ "%.2f"|format(total_loan_paid) }} AUD
+              {{ "%.2f"|format(total_loan_paid) }} {{
+              settings.get('target_currency', 'AUD') }}
             </p>
             <p class="text-muted mb-2 small">
               <i class="bi bi-graph-up-arrow"></i> {{ loan_payment_count }}
               payment(s) of {{ "%.2f"|format(settings.default_loan_repayment) }}
-              AUD
+              {{ settings.get('target_currency', 'AUD') }}
             </p>
             <div
               class="progress mb-2"
@@ -158,7 +162,8 @@ block content %}
                 font-weight: 800;
               "
             >
-              {{ "%.2f"|format(remaining_loan_balance) }} AUD
+              {{ "%.2f"|format(remaining_loan_balance) }} {{
+              settings.get('target_currency', 'AUD') }}
             </p>
             {% if remaining_loan_balance > 0 %}
             <div
@@ -390,6 +395,12 @@ block content %}
       font-size: 0.8rem !important;
     }
 
+    /* Disable sticky headers on mobile - they cause overlap */
+    .table thead.sticky-top,
+    .table tfoot.sticky-bottom {
+      position: relative !important;
+    }
+
     /* Card header sort buttons */
     .card-header .d-flex {
       flex-direction: column;
@@ -465,10 +476,26 @@ block content %}
       vertical-align: middle;
     }
 
-    /* Hide icons in table headers on mobile to save space */
-    .table thead th i,
+    /* Ensure sticky is disabled on phones too */
+    .table thead.sticky-top,
+    .table tfoot.sticky-bottom {
+      position: relative !important;
+      top: auto !important;
+      bottom: auto !important;
+    }
+
+    /* Hide icons in table headers on mobile to save space - but keep action button icons */
+    .table thead th i {
+      display: none !important;
+    }
+
     .table tbody td i {
       display: none !important;
+    }
+
+    /* Show action button icons */
+    .table tbody td .btn i {
+      display: inline-block !important;
     }
 
     /* Make table headers wrap text */
@@ -481,7 +508,9 @@ block content %}
     /* Ensure table is scrollable */
     .table-responsive {
       overflow-x: auto !important;
+      overflow-y: auto !important;
       -webkit-overflow-scrolling: touch;
+      max-height: 500px !important;
     }
 
     /* Disable hover effects on mobile */
@@ -537,6 +566,14 @@ block content %}
       font-weight: 600;
     }
 
+    /* Double-ensure sticky is disabled */
+    .table thead.sticky-top,
+    .table tfoot.sticky-bottom {
+      position: relative !important;
+      top: auto !important;
+      bottom: auto !important;
+    }
+
     /* Reduce column widths further */
     .table thead th:first-child {
       min-width: 60px;
@@ -562,12 +599,25 @@ block content %}
     .card-header h4 {
       font-size: 0.9rem !important;
     }
+
+    /* Ensure table responsive is working */
+    .table-responsive {
+      max-height: 400px !important;
+    }
   }
 
   /* Landscape optimization */
   @media (max-width: 768px) and (orientation: landscape) {
     .table-responsive {
       max-height: 250px !important;
+    }
+
+    /* Disable sticky in landscape too */
+    .table thead.sticky-top,
+    .table tfoot.sticky-bottom {
+      position: relative !important;
+      top: auto !important;
+      bottom: auto !important;
     }
 
     /* Summary cards in a row */

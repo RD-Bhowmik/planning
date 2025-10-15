@@ -80,7 +80,8 @@
               <div>
                 <div class="small opacity-75">Total Net Income</div>
                 <div class="h4 mb-0 fw-bold">
-                  {{ "%.2f"|format(data.total_net) }} AUD
+                  {{ "%.2f"|format(data.total_net) }} {{
+                  settings.get('target_currency', 'AUD') }}
                 </div>
               </div>
               <div>
@@ -94,7 +95,7 @@
                   action="{{ url_for('process_month', month_key=month_key) }}"
                   method="post"
                   class="d-inline"
-                  onsubmit="return confirm('Add {{ '%.2f'|format(data.total_net) }} AUD to savings?');"
+                  onsubmit="return confirm('Add {{ '%.2f'|format(data.total_net) }} {{ settings.get('target_currency', 'AUD') }} to savings?');"
                 >
                   <button type="submit" class="btn btn-warning btn-lg shadow">
                     <i class="bi bi-arrow-right-circle-fill"></i> Add to Savings
@@ -150,13 +151,16 @@
                   <span class="badge bg-info">{{ entry.hours_worked }}h</span>
                 </td>
                 <td class="py-3 px-4 text-end text-muted">
-                  {{ "%.2f"|format(entry.gross_income) }} AUD
+                  {{ "%.2f"|format(entry.gross_income) }} {{
+                  settings.get('target_currency', 'AUD') }}
                 </td>
                 <td class="py-3 px-4 text-end fw-bold text-success">
-                  {{ "%.2f"|format(net) }} AUD
+                  {{ "%.2f"|format(net) }} {{ settings.get('target_currency',
+                  'AUD') }}
                 </td>
                 <td class="py-3 px-4 text-end text-danger">
-                  -{{ "%.2f"|format(tax) }} AUD
+                  -{{ "%.2f"|format(tax) }} {{ settings.get('target_currency',
+                  'AUD') }}
                 </td>
               </tr>
               {% endfor %}
@@ -170,14 +174,16 @@
                 </td>
                 <td class="py-3 px-4 text-end">
                   {{ "%.2f"|format(data.entries|sum(attribute='gross_income'))
-                  }} AUD
+                  }} {{ settings.get('target_currency', 'AUD') }}
                 </td>
                 <td class="py-3 px-4 text-end text-success">
-                  {{ "%.2f"|format(data.total_net) }} AUD
+                  {{ "%.2f"|format(data.total_net) }} {{
+                  settings.get('target_currency', 'AUD') }}
                 </td>
                 <td class="py-3 px-4 text-end text-danger">
                   -{{ "%.2f"|format(data.entries|sum(attribute='gross_income') -
-                  data.total_net) }} AUD
+                  data.total_net) }} {{ settings.get('target_currency', 'AUD')
+                  }}
                 </td>
               </tr>
             </tfoot>
@@ -320,16 +326,45 @@
       padding: 0.75rem !important;
     }
 
-    /* Table - compact */
+    /* Table - compact - MATCHING LOAN MANAGEMENT */
     .table {
-      font-size: 0.75rem !important;
+      font-size: 0.7rem !important;
     }
 
     .table thead th,
     .table tbody td,
     .table tfoot td {
-      padding: 0.5rem 0.35rem !important;
-      font-size: 0.75rem;
+      padding: 0.4rem 0.25rem !important;
+      font-size: 0.7rem !important;
+    }
+
+    /* Disable sticky headers on mobile */
+    .table thead.sticky-top,
+    .table tfoot.sticky-bottom {
+      position: relative !important;
+      top: auto !important;
+      bottom: auto !important;
+    }
+
+    /* Hide icons in tables to save space - but keep action button icons */
+    .table thead th i {
+      display: none !important;
+    }
+
+    .table tbody td i {
+      display: none !important;
+    }
+
+    /* Show action button icons */
+    .table tbody td .btn i {
+      display: inline-block !important;
+    }
+
+    .table-responsive {
+      max-height: 500px !important;
+      overflow-x: auto !important;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch;
     }
 
     /* Disable hover effects */
@@ -370,13 +405,26 @@
   @media (max-width: 375px) {
     /* Ultra compact table */
     .table {
-      font-size: 0.7rem !important;
+      font-size: 0.65rem !important;
     }
 
     .table thead th,
     .table tbody td,
     .table tfoot td {
-      padding: 0.4rem 0.25rem !important;
+      padding: 0.35rem 0.2rem !important;
+      font-size: 0.65rem !important;
+    }
+
+    /* Double-ensure sticky is disabled */
+    .table thead.sticky-top,
+    .table tfoot.sticky-bottom {
+      position: relative !important;
+      top: auto !important;
+      bottom: auto !important;
+    }
+
+    .table-responsive {
+      max-height: 400px !important;
     }
 
     /* Hide some icons */
