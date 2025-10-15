@@ -358,6 +358,13 @@ block content %}
       padding: 0.25rem !important;
     }
 
+    /* Main layout columns */
+    .col-lg-5,
+    .col-lg-7 {
+      width: 100%;
+      max-width: 100%;
+    }
+
     /* Progress bars */
     .progress {
       height: 22px;
@@ -375,6 +382,34 @@ block content %}
     /* Card hover - reduce on mobile */
     .card:hover {
       transform: translateY(-3px);
+    }
+
+    /* Payment History table - better spacing */
+    .table thead th {
+      white-space: nowrap;
+      font-size: 0.8rem !important;
+    }
+
+    /* Card header sort buttons */
+    .card-header .d-flex {
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: flex-start !important;
+    }
+
+    .card-header h4 {
+      width: 100%;
+    }
+
+    .card-header .btn-group {
+      width: 100%;
+      display: flex;
+    }
+
+    .card-header .btn-group label {
+      flex: 1;
+      font-size: 0.75rem;
+      padding: 0.4rem 0.5rem;
     }
   }
 
@@ -413,14 +448,40 @@ block content %}
 
     /* Tables - compact */
     .table {
-      font-size: 0.75rem !important;
+      font-size: 0.7rem !important;
     }
 
     .table thead th,
     .table tbody td,
     .table tfoot td {
-      padding: 0.5rem 0.35rem !important;
-      font-size: 0.75rem;
+      padding: 0.4rem 0.25rem !important;
+      font-size: 0.7rem !important;
+    }
+
+    /* Payment History table specific fixes */
+    .table thead th {
+      white-space: normal !important;
+      line-height: 1.2;
+      vertical-align: middle;
+    }
+
+    /* Hide icons in table headers on mobile to save space */
+    .table thead th i,
+    .table tbody td i {
+      display: none !important;
+    }
+
+    /* Make table headers wrap text */
+    .table thead th:nth-child(2),
+    .table thead th:nth-child(3),
+    .table thead th:nth-child(4) {
+      min-width: 70px;
+    }
+
+    /* Ensure table is scrollable */
+    .table-responsive {
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch;
     }
 
     /* Disable hover effects on mobile */
@@ -460,18 +521,31 @@ block content %}
   @media (max-width: 375px) {
     /* Ultra compact */
     .table {
-      font-size: 0.7rem !important;
+      font-size: 0.65rem !important;
     }
 
     .table thead th,
     .table tbody td,
     .table tfoot td {
-      padding: 0.4rem 0.25rem !important;
+      padding: 0.35rem 0.2rem !important;
+      font-size: 0.65rem !important;
     }
 
-    /* Hide some icons */
-    .table th i {
-      display: none;
+    /* Make table headers even more compact */
+    .table thead th {
+      line-height: 1.1;
+      font-weight: 600;
+    }
+
+    /* Reduce column widths further */
+    .table thead th:first-child {
+      min-width: 60px;
+    }
+
+    .table thead th:nth-child(2),
+    .table thead th:nth-child(3),
+    .table thead th:nth-child(4) {
+      min-width: 55px;
     }
 
     /* Card body */
@@ -482,6 +556,11 @@ block content %}
     /* Progress bars */
     .progress {
       height: 18px;
+    }
+
+    /* Card header */
+    .card-header h4 {
+      font-size: 0.9rem !important;
     }
   }
 
