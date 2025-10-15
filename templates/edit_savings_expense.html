@@ -45,7 +45,55 @@ block content %}
     </div>
   </div>
 </div>
+
+<style>
+  /* Mobile Optimizations for Edit Forms */
+  @media (max-width: 768px) {
+    .col-md-6 {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .card-header h2 {
+      font-size: 1.25rem !important;
+    }
+
+    .card-body {
+      padding: 1rem !important;
+    }
+
+    .form-control {
+      font-size: 0.95rem;
+      padding: 0.65rem 0.85rem;
+    }
+
+    .form-label {
+      font-size: 0.9rem;
+    }
+
+    .btn {
+      font-size: 0.9rem;
+      padding: 0.6rem 1rem;
+    }
+  }
+
+  @media (max-width: 375px) {
+    .card-body {
+      padding: 0.75rem !important;
+    }
+
+    .form-control {
+      font-size: 0.9rem;
+      padding: 0.6rem 0.75rem;
+    }
+
+    .btn {
+      font-size: 0.85rem;
+      padding: 0.55rem 0.9rem;
+    }
+  }
+</style>
+
 {% endblock %}
-
-
-

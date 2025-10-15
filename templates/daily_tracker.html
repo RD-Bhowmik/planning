@@ -396,6 +396,200 @@ block content %}
     background-color: rgba(102, 126, 234, 0.08);
     transform: scale(1.01);
   }
+
+  /* Mobile Optimizations for Daily Tracker Page */
+  @media (max-width: 768px) {
+    /* Summary cards - better stacking */
+    .col-md-4 {
+      padding: 0.25rem !important;
+    }
+
+    /* Main layout - full width */
+    .col-lg-8,
+    .col-lg-4 {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    /* Table - scrollable */
+    .table-responsive {
+      max-height: 400px !important;
+    }
+
+    /* Card header with sort buttons */
+    .card-header .d-flex {
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: flex-start !important;
+    }
+
+    .card-header h4 {
+      font-size: 1rem !important;
+      width: 100%;
+    }
+
+    .card-header .btn-group {
+      width: 100%;
+      display: flex;
+    }
+
+    .card-header .btn-group label {
+      flex: 1;
+      font-size: 0.75rem;
+      padding: 0.4rem 0.5rem;
+    }
+
+    /* Remove sticky on mobile */
+    .sticky-top {
+      position: relative !important;
+      top: 0 !important;
+    }
+  }
+
+  @media (max-width: 576px) {
+    /* Header adjustments */
+    header .display-4 {
+      font-size: 1.5rem !important;
+    }
+
+    /* Summary cards - compact */
+    .card-body {
+      padding: 0.75rem !important;
+    }
+
+    .card-body .fs-4 {
+      font-size: 1.25rem !important;
+    }
+
+    .card-body h6 {
+      font-size: 0.85rem !important;
+    }
+
+    .card-body .h3 {
+      font-size: 1.25rem !important;
+    }
+
+    /* Table - more compact */
+    .table {
+      font-size: 0.75rem !important;
+    }
+
+    .table thead th,
+    .table tbody td,
+    .table tfoot td {
+      padding: 0.5rem 0.35rem !important;
+      font-size: 0.75rem;
+    }
+
+    /* Disable hover transform on mobile */
+    .table tbody tr:hover {
+      transform: none;
+    }
+
+    /* Action buttons - smaller */
+    .btn-group-sm .btn {
+      padding: 0.25rem 0.35rem;
+      font-size: 0.7rem;
+    }
+
+    /* Badge sizing */
+    .badge {
+      font-size: 0.7rem;
+      padding: 0.3rem 0.5rem;
+    }
+
+    /* Form optimization */
+    .form-control-lg,
+    .input-group-lg .form-control {
+      font-size: 0.9rem !important;
+      padding: 0.55rem 0.7rem !important;
+    }
+
+    .input-group-lg .input-group-text {
+      font-size: 0.9rem !important;
+      padding: 0.55rem 0.7rem !important;
+    }
+
+    .form-label {
+      font-size: 0.85rem !important;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-text {
+      font-size: 0.75rem !important;
+    }
+
+    /* Card spacing */
+    .card.mb-4 {
+      margin-bottom: 1rem !important;
+    }
+
+    /* Date format - shorter on mobile */
+    .table tbody td:first-child {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100px;
+    }
+  }
+
+  /* Very small phones */
+  @media (max-width: 375px) {
+    /* Ultra compact table */
+    .table {
+      font-size: 0.7rem !important;
+    }
+
+    .table thead th,
+    .table tbody td,
+    .table tfoot td {
+      padding: 0.4rem 0.25rem !important;
+    }
+
+    /* Hide some table icons to save space */
+    .table th i {
+      display: none;
+    }
+
+    /* Forms - minimal padding */
+    .card-body {
+      padding: 0.65rem !important;
+    }
+
+    /* Buttons - smaller */
+    .btn {
+      font-size: 0.8rem;
+      padding: 0.4rem 0.7rem;
+    }
+
+    /* Date input - full width */
+    input[type="date"] {
+      font-size: 0.85rem !important;
+    }
+  }
+
+  /* Landscape optimization */
+  @media (max-width: 768px) and (orientation: landscape) {
+    .table-responsive {
+      max-height: 300px !important;
+    }
+
+    .card {
+      margin-bottom: 0.5rem !important;
+    }
+
+    /* Summary cards in a row */
+    .row.g-3 {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+    }
+
+    .row.g-3 > .col-md-4 {
+      flex: 0 0 auto;
+      width: 50%;
+    }
+  }
 </style>
 
 {% endblock %}

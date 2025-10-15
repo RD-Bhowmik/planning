@@ -323,6 +323,182 @@ block content %}
     background-color: rgba(102, 126, 234, 0.08);
     transform: scale(1.01);
   }
+
+  /* Mobile Optimizations for Capital Page */
+  @media (max-width: 768px) {
+    /* Header section - stack on mobile */
+    header .row {
+      flex-direction: column;
+    }
+
+    header .col-lg-7,
+    header .col-lg-5 {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    /* Summary cards - optimize spacing */
+    .col-md-4 {
+      padding: 0.25rem !important;
+    }
+
+    /* Table section - make scrollable */
+    .table-responsive {
+      max-height: 400px !important;
+    }
+
+    /* Form sidebar - full width on tablets */
+    .col-lg-8,
+    .col-lg-4 {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    /* Sort order buttons - stack better */
+    .btn-group-sm label {
+      font-size: 0.8rem;
+      padding: 0.35rem 0.6rem;
+    }
+
+    /* Card header with sort buttons - better layout */
+    .card-header .d-flex {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .card-header h4 {
+      font-size: 1rem !important;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-header .badge {
+      font-size: 0.75rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    /* Header adjustments */
+    header .display-5 {
+      font-size: 1.5rem !important;
+    }
+
+    /* Summary cards - reduce padding more */
+    .card-body {
+      padding: 0.75rem !important;
+    }
+
+    .card-body .bi {
+      font-size: 1.5rem !important;
+    }
+
+    .card-body h6 {
+      font-size: 0.85rem !important;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-body .h4 {
+      font-size: 1.25rem !important;
+    }
+
+    /* Table - more compact on phones */
+    .table-responsive {
+      max-height: 350px !important;
+      overflow-x: auto;
+    }
+
+    .table tbody tr:hover {
+      transform: none; /* Disable scale on mobile for performance */
+    }
+
+    /* Action buttons in table - smaller */
+    .btn-group-sm {
+      gap: 0.15rem;
+    }
+
+    /* Form section - optimize */
+    .sticky-top {
+      position: relative !important; /* Remove sticky on mobile */
+      top: 0 !important;
+    }
+
+    .form-control-lg,
+    .input-group-lg .form-control {
+      font-size: 0.95rem !important;
+      padding: 0.6rem 0.75rem !important;
+    }
+
+    .input-group-lg .input-group-text {
+      font-size: 0.95rem !important;
+      padding: 0.6rem 0.75rem !important;
+    }
+
+    /* Form labels */
+    .form-label {
+      font-size: 0.9rem !important;
+    }
+
+    /* Sort buttons - better mobile layout */
+    .card-header .btn-group {
+      display: flex;
+      width: 100%;
+    }
+
+    .card-header .btn-group label {
+      flex: 1;
+      font-size: 0.75rem;
+      padding: 0.4rem 0.5rem;
+    }
+
+    .card-header .btn-group label i {
+      font-size: 0.9rem;
+    }
+
+    /* Remaining capital card - compact */
+    header .card-body .h3 {
+      font-size: 1.5rem !important;
+    }
+
+    header .card-body .fs-4 {
+      font-size: 1.25rem !important;
+    }
+  }
+
+  /* Very small phones */
+  @media (max-width: 375px) {
+    /* Ultra compact mode */
+    .table {
+      font-size: 0.7rem !important;
+    }
+
+    .table thead th,
+    .table tbody td,
+    .table tfoot td {
+      padding: 0.4rem 0.25rem !important;
+    }
+
+    /* Form inputs even smaller */
+    .form-control,
+    .form-select {
+      font-size: 0.85rem !important;
+      padding: 0.5rem 0.6rem !important;
+    }
+
+    /* Button text - hide some words on very small screens */
+    .btn i {
+      margin-right: 0.25rem;
+    }
+  }
+
+  /* Landscape orientation optimization */
+  @media (max-width: 768px) and (orientation: landscape) {
+    .table-responsive {
+      max-height: 300px !important;
+    }
+
+    header .card {
+      margin-bottom: 0.5rem;
+    }
+  }
 </style>
 
 {% endblock %}

@@ -290,6 +290,117 @@
   .opacity-75 {
     opacity: 0.75;
   }
+
+  /* Mobile Optimizations for Monthly Summary Page */
+  @media (max-width: 768px) {
+    /* Table adjustments */
+    .table-responsive {
+      max-height: 400px !important;
+    }
+
+    /* Card headers */
+    .card-header h4 {
+      font-size: 1rem !important;
+    }
+
+    /* Month cards - better spacing */
+    .card.mb-3 {
+      margin-bottom: 1rem !important;
+    }
+  }
+
+  @media (max-width: 576px) {
+    /* Header */
+    header .display-4 {
+      font-size: 1.5rem !important;
+    }
+
+    /* Card body padding */
+    .card-body {
+      padding: 0.75rem !important;
+    }
+
+    /* Table - compact */
+    .table {
+      font-size: 0.75rem !important;
+    }
+
+    .table thead th,
+    .table tbody td,
+    .table tfoot td {
+      padding: 0.5rem 0.35rem !important;
+      font-size: 0.75rem;
+    }
+
+    /* Disable hover effects */
+    .table tbody tr:hover {
+      transform: none;
+    }
+
+    /* Buttons - smaller */
+    .btn {
+      font-size: 0.8rem;
+      padding: 0.4rem 0.7rem;
+    }
+
+    .btn-sm {
+      font-size: 0.75rem;
+      padding: 0.3rem 0.5rem;
+    }
+
+    /* Month headers */
+    h5 {
+      font-size: 1rem !important;
+    }
+
+    /* Badge sizing */
+    .badge {
+      font-size: 0.7rem;
+      padding: 0.3rem 0.5rem;
+    }
+
+    /* Alerts - compact */
+    .alert {
+      padding: 0.65rem;
+      font-size: 0.85rem;
+    }
+  }
+
+  /* Very small phones */
+  @media (max-width: 375px) {
+    /* Ultra compact table */
+    .table {
+      font-size: 0.7rem !important;
+    }
+
+    .table thead th,
+    .table tbody td,
+    .table tfoot td {
+      padding: 0.4rem 0.25rem !important;
+    }
+
+    /* Hide some icons */
+    .table th i {
+      display: none;
+    }
+
+    /* Buttons - even smaller */
+    .btn {
+      font-size: 0.75rem;
+      padding: 0.35rem 0.6rem;
+    }
+  }
+
+  /* Landscape optimization */
+  @media (max-width: 768px) and (orientation: landscape) {
+    .table-responsive {
+      max-height: 250px !important;
+    }
+
+    .card {
+      margin-bottom: 0.5rem !important;
+    }
+  }
 </style>
 
 {% endblock %}

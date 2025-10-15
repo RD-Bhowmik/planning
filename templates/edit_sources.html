@@ -478,6 +478,122 @@ block content %}
     width: 1rem;
     height: 1rem;
   }
+
+  /* Mobile Optimizations for Edit Sources Page */
+  @media (max-width: 768px) {
+    /* Form cards - better spacing */
+    .card {
+      margin-bottom: 1rem;
+    }
+
+    /* Buttons - full width on tablets */
+    .btn-group {
+      width: 100%;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-group .btn {
+      flex: 1;
+    }
+
+    /* Source items - better mobile layout */
+    .source-item {
+      padding: 0.75rem;
+    }
+
+    /* Row adjustments */
+    .row.g-3 {
+      gap: 0.5rem !important;
+    }
+  }
+
+  @media (max-width: 576px) {
+    /* Header */
+    header .display-5 {
+      font-size: 1.5rem !important;
+    }
+
+    /* Card body */
+    .card-body {
+      padding: 0.75rem !important;
+    }
+
+    /* Form controls */
+    .form-control,
+    .form-select {
+      font-size: 0.9rem;
+      padding: 0.6rem 0.75rem;
+    }
+
+    .form-label {
+      font-size: 0.9rem;
+      margin-bottom: 0.4rem;
+    }
+
+    /* Input groups */
+    .input-group-text {
+      font-size: 0.9rem;
+      padding: 0.6rem 0.75rem;
+    }
+
+    /* Buttons */
+    .btn {
+      font-size: 0.85rem;
+      padding: 0.5rem 0.9rem;
+    }
+
+    .btn-lg {
+      font-size: 0.95rem;
+      padding: 0.65rem 1.1rem;
+    }
+
+    /* Source items - compact */
+    .source-item {
+      padding: 0.65rem;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Remove source buttons */
+    .btn-outline-danger {
+      padding: 0.4rem 0.7rem;
+      font-size: 0.8rem;
+    }
+
+    /* Add source button */
+    .btn-success {
+      width: 100%;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Alerts */
+    .alert {
+      padding: 0.65rem;
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 375px) {
+    /* Ultra compact mode */
+    .card-body {
+      padding: 0.65rem !important;
+    }
+
+    .form-control,
+    .form-select {
+      font-size: 0.85rem;
+      padding: 0.5rem 0.65rem;
+    }
+
+    .btn {
+      font-size: 0.8rem;
+      padding: 0.45rem 0.75rem;
+    }
+
+    .source-item {
+      padding: 0.5rem;
+    }
+  }
 </style>
 
 {% endblock %}

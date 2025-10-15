@@ -431,6 +431,124 @@ block content %}
     width: 1rem;
     height: 1rem;
   }
+
+  /* Mobile Optimizations for Sources Page */
+  @media (max-width: 768px) {
+    /* Header section - stack vertically on mobile */
+    header .d-flex {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    header .btn-lg {
+      width: 100%;
+      text-align: center;
+    }
+
+    /* Country selector card - better mobile layout */
+    .card-body .row {
+      gap: 0.5rem;
+    }
+
+    /* Country selector - stack on mobile */
+    .card-body .col-md-3,
+    .card-body .col-md-9 {
+      padding: 0.5rem 0;
+    }
+
+    .card-body .col-md-8,
+    .card-body .col-md-4 {
+      padding: 0.25rem 0;
+    }
+
+    /* Capital source cards - full width on phones */
+    .col-md-4 {
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
+    }
+
+    /* Exchange rate section - adjust font sizes */
+    #current-rate-display {
+      font-size: 2rem !important;
+    }
+
+    /* Summary cards - reduce icon sizes */
+    .card-header .bi {
+      font-size: 2.5rem !important;
+    }
+
+    .card-header h2 {
+      font-size: 1.25rem !important;
+    }
+
+    /* Info alerts - better mobile spacing */
+    .alert.alert-light {
+      padding: 0.5rem 0.75rem;
+    }
+
+    .alert.alert-light small {
+      font-size: 0.8rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    /* Reduce card hover effects on mobile (performance) */
+    .card:hover {
+      transform: translateY(-5px) scale(1.01);
+    }
+
+    /* Country selector - simplify layout */
+    .form-select-lg {
+      font-size: 0.95rem !important;
+      padding: 0.6rem 0.75rem !important;
+    }
+
+    /* Capital cards - reduce padding and font sizes */
+    .card-header {
+      padding: 1rem 0.75rem !important;
+    }
+
+    .card-header .bi {
+      font-size: 2rem !important;
+    }
+
+    .card-body .display-5 {
+      font-size: 1.5rem !important;
+    }
+
+    /* Exchange rate button - full width on mobile */
+    #fetchRateBtn {
+      font-size: 0.95rem;
+    }
+
+    /* Alert info boxes - compact */
+    .alert-info {
+      padding: 0.5rem !important;
+    }
+
+    /* Total capital card - adjust display size */
+    .display-4 {
+      font-size: 1.75rem !important;
+    }
+
+    /* Hide emoji flags on very small screens to save space */
+    @media (max-width: 375px) {
+      .form-select option {
+        font-size: 0.85rem;
+      }
+    }
+  }
+
+  /* Landscape phone optimization */
+  @media (max-width: 768px) and (orientation: landscape) {
+    .card-header .bi {
+      font-size: 2rem !important;
+    }
+    
+    .card {
+      margin-bottom: 0.75rem;
+    }
+  }
 </style>
 
 {% endblock %}

@@ -313,6 +313,87 @@ block content %}
     color: white !important;
     border-color: #667eea;
   }
+
+  /* Mobile Optimizations for Edit Loan Page */
+  @media (max-width: 768px) {
+    /* Layout adjustments */
+    .col-lg-8 {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 576px) {
+    /* Header */
+    header .display-5 {
+      font-size: 1.5rem !important;
+    }
+
+    /* Card body */
+    .card-body {
+      padding: 1rem !important;
+    }
+
+    /* Form controls */
+    .form-control {
+      font-size: 0.95rem;
+      padding: 0.65rem 0.85rem;
+    }
+
+    .form-label {
+      font-size: 0.9rem;
+    }
+
+    /* Input groups */
+    .input-group-text {
+      font-size: 0.95rem;
+      padding: 0.65rem 0.85rem;
+    }
+
+    /* Buttons */
+    .btn {
+      font-size: 0.9rem;
+      padding: 0.6rem 1rem;
+    }
+
+    .btn-lg {
+      font-size: 0.95rem;
+      padding: 0.65rem 1.1rem;
+    }
+
+    /* Form text */
+    .form-text {
+      font-size: 0.85rem;
+    }
+
+    /* Alerts */
+    .alert {
+      padding: 0.65rem;
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 375px) {
+    /* Ultra compact mode */
+    .card-body {
+      padding: 0.75rem !important;
+    }
+
+    .form-control {
+      font-size: 0.9rem;
+      padding: 0.6rem 0.75rem;
+    }
+
+    .input-group-text {
+      font-size: 0.9rem;
+      padding: 0.6rem 0.75rem;
+    }
+
+    .btn {
+      font-size: 0.85rem;
+      padding: 0.55rem 0.9rem;
+    }
+  }
 </style>
 
 {% endblock %}

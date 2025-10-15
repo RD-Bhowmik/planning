@@ -163,6 +163,93 @@
         .login-right {
           display: none;
         }
+        .login-left {
+          padding: 2rem;
+        }
+      }
+
+      /* Additional mobile optimizations */
+      @media (max-width: 576px) {
+        body {
+          padding: 1rem;
+        }
+
+        .login-container {
+          border-radius: 16px;
+        }
+
+        .login-left {
+          padding: 1.5rem;
+        }
+
+        .brand {
+          font-size: 1.5rem;
+        }
+
+        .brand i {
+          font-size: 1.75rem;
+        }
+
+        .form-control {
+          padding: 0.75rem 1rem;
+          font-size: 0.95rem;
+        }
+
+        .btn-primary,
+        .btn-guest {
+          padding: 0.75rem 1.5rem;
+          font-size: 0.95rem;
+        }
+
+        .alert {
+          padding: 0.75rem;
+          font-size: 0.9rem;
+        }
+
+        h2,
+        h3 {
+          font-size: 1.25rem !important;
+        }
+
+        p {
+          font-size: 0.95rem;
+        }
+
+        .alert-info {
+          padding: 0.75rem !important;
+        }
+
+        .alert-info .bi {
+          font-size: 1.25rem !important;
+        }
+
+        .alert-info p {
+          font-size: 0.85rem;
+        }
+      }
+
+      @media (max-width: 375px) {
+        body {
+          padding: 0.5rem;
+        }
+
+        .login-left {
+          padding: 1rem;
+        }
+
+        .brand {
+          font-size: 1.25rem;
+        }
+
+        .form-control {
+          font-size: 0.9rem;
+          padding: 0.65rem 0.85rem;
+        }
+
+        .btn {
+          font-size: 0.9rem;
+          padding: 0.65rem 1.25rem;
+        }
       }
     </style>
   </head>
