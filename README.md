@@ -244,10 +244,6 @@ Developed a comprehensive financial management web application using Python Flas
 - [ ] Export functionality (PDF reports, Excel spreadsheets)
 - [ ] Integration with banking APIs for automatic transaction import
 
-## 📝 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
 ## 👨‍💻 Author
 
 **RD-Bhowmik**
